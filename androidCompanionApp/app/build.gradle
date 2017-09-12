@@ -1,0 +1,80 @@
+apply plugin: 'com.android.application'
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile files('libs/tvssdk.jar')
+    compile files('libs/qrom_component_wup.jar')
+    compile files('libs/qrom_component_log.jar')
+    compile files('libs/wup-1.0.0-SNAPSHOT.jar')
+    compile files('libs/mta-sdk-1.6.2.jar')
+    compile files('libs/open_sdk_r5793.jar')
+    compile files('libs/wh_statistics.jar')
+    compile files('libs/qb_guidutil.jar')
+    compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'commons-io:commons-io:2.4'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'
+}
+
+String apiKeyLocation = "./src/main/assets/api_key.txt"
+String caCertLocation = "./src/main/res/raw/ca.crt"
+
+task checkForRequiredFiles << {
+  if (!file(apiKeyLocation).exists()) {
+      throw new FileNotFoundException("The API Key file does not exist. Please make sure " + apiKeyLocation + " has been created and populated with the proper values from the Security Profile you created.")
+  }
+
+  if (!file(caCertLocation).exists()) {
+      throw new FileNotFoundException("The Certificate Authority public certificate file does not exist. Please make sure " + caCertLocation + " exists and contains the public certificate created during setup.")
+  }
+}
+preBuild.dependsOn checkForRequiredFiles
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion '25.0.0'
+
+    defaultConfig {
+        applicationId "com.tencent.ai.dobby"
+        minSdkVersion 8
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+
+    // In practice you would have separate keys for debug and release
+    signingConfigs {
+
+        debug {
+            storeFile file('../DobbyAndroid.keystore')
+            keyAlias 'dobby'
+            keyPassword 'dobby0915'
+            storePassword 'dobby0915'
+        }
+        release {
+            storeFile file('../DobbyAndroid.keystore')
+            keyAlias 'dobby'
+            keyPassword 'dobby0915'
+            storePassword 'dobby0915'
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    lintOptions {
+        abortOnError false
+        disable 'IconMissingDensityFolder'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+
+        debug {
+        }
+    }
+}
