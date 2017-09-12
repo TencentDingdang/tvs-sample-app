@@ -15,7 +15,7 @@ DSN：序列号
 
 5、设置OpenSSL环境变量字段，OPENSSL_CONF为OpenSSL目录\bin\openssl.cfg
 
-6、打开目录samples\javaclient里的ssl.cnf文件，填入所有带YOUR开头的字段，注意countryName必须为两个字母，如CN
+6、打开目录javaclient里的ssl.cnf文件，填入所有带YOUR开头的字段，注意countryName必须为两个字母，如CN
 
 7、进入javaclient目录，打开命令行，运行generate.bat
 
