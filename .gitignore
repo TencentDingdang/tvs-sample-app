@@ -1,0 +1,14 @@
+.gradle
+.idea
+build
+gradle.properties
+local.properties
+*.iml
+*.jks
+api_key.txt
+ssl.cnf
+config.json
+*.crt
+certs
+logs
+target
