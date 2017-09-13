@@ -1,0 +1,13 @@
+{
+    "productId":"",
+    "dsn":"",
+    "provisioningMethod":"companionApp",
+    "wakeWordAgentEnabled":false,
+    "locale":"en-US",
+    "companionApp":{
+        "localPort":8443,
+        "lwtUrl":"https://tvstest.html5.qq.com",
+        "sslKeyStore":"",
+        "sslKeyStorePassphrase":""
+    }
+}
