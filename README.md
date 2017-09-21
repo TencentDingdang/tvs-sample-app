@@ -26,3 +26,5 @@ DSN：序列号
 9、运行keytool -list -v -alias androiddebugkey -keystore keystore.jks，所有password字段输入android，保存MD5和SHA256字段
 
 10、在签名生成网站上输入包名和以上两个字段信息，生成api_key放到androidCompanionApp/app/src/main/assets/api_key.txt里
+
+注：SDK目录下，仅为参考SDK。后续厂商接入TVS，请在开放平台上注册后，我们将以邮件形式推送SDK。
