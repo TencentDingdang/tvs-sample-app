@@ -26,6 +26,7 @@ import com.tencent.ai.tvs.ConstantValues;
 import com.tencent.ai.tvs.LoginProxy;
 import com.tencent.ai.tvs.env.ELoginPlatform;
 import com.tencent.ai.tvs.info.QQOpenInfoManager;
+import com.tencent.ai.tvs.info.UserInfoManager;
 import com.tencent.ai.tvs.info.WxInfoManager;
 import com.tencent.connect.common.Constants;
 
@@ -311,6 +312,9 @@ public class LoginWithTVSActivity extends AppCompatActivity implements Authorize
             case AuthorizeListener.TOKENVERIFY_TYPE:
                 sendLoginInfoToDevice(ELoginPlatform.QQOpen);
                 break;
+            case AuthorizeListener.USERINFORECV_TYPE:
+                UserInfoManager mgr = UserInfoManager.getInstance();
+                break;
         }
     }
 
@@ -328,6 +332,8 @@ public class LoginWithTVSActivity extends AppCompatActivity implements Authorize
                 break;
             case AuthorizeListener.TOKENVERIFY_TYPE:
                 connectSuccessState();
+                break;
+            case AuthorizeListener.USERINFORECV_TYPE:
                 break;
         }
     }
