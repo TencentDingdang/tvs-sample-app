@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringUtils;
  * Container that encapsulates all the information that exists in the config file.
  */
 public class DeviceConfig {
-    private static final String DEFAULT_HOST = "https://tvstest.html5.qq.com";
+    private static final String DEFAULT_HOST = "https://tvstest.sparta.html5.qq.com";
     public static final String FILE_NAME = "config.json";
     private static final List<Locale> SUPPORTED_LOCALES = new ArrayList<>();
     static {

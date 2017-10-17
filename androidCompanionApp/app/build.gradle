@@ -2,15 +2,9 @@ apply plugin: 'com.android.application'
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile files('libs/tvssdk.jar')
-    compile files('libs/qrom_component_wup.jar')
-    compile files('libs/qrom_component_log.jar')
-    compile files('libs/wup-1.0.0-SNAPSHOT.jar')
-    compile files('libs/mta-sdk-1.6.2.jar')
-    compile files('libs/open_sdk_r5793.jar')
-    compile files('libs/wh_statistics.jar')
-    compile files('libs/qb_guidutil.jar')
+    compile(name:'tvsloginlib', ext:'aar')
     compile 'com.android.support:appcompat-v7:22.2.0'
+    compile 'com.android.support:design:22.2.0'
     compile 'commons-io:commons-io:2.4'
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'
@@ -36,7 +30,7 @@ android {
 
     defaultConfig {
         applicationId "com.tencent.ai.dobby"
-        minSdkVersion 8
+        minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -75,6 +69,12 @@ android {
         }
 
         debug {
+        }
+    }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
         }
     }
 }
