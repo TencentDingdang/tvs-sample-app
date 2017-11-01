@@ -13,7 +13,7 @@ setlocal enableextensions
 if not exist ".\certs\ca\" mkdir .\certs\ca\
 if not exist ".\certs\server\" mkdir .\certs\server\
 if not exist "..\androidCompanionApp\app\src\main\res\raw\" mkdir ..\androidCompanionApp\app\src\main\res\raw\
-if not exist "..\iOSCompanionApp\Resources\App\" mkdir ..\iOSCompanionApp\Resources\App\
+if not exist "..\iOSCompanionAppDemo\iOSCompanionApp\Resources\App\" mkdir ..\iOSCompanionAppDemo\iOSCompanionApp\Resources\App\
 endlocal
 
 REM Create CA
@@ -34,4 +34,4 @@ xcopy /Y certs\ca\ca.crt ..\androidCompanionApp\app\src\main\res\raw\
 
 REM Copy the CA certificate in the correct format to iOS
 openssl x509 -outform der -in certs\ca\ca.crt -out certs\ca\ca.der
-xcopy /Y certs\ca\ca.der ..\iOSCompanionApp\Resources\App\
+xcopy /Y certs\ca\ca.der ..\iOSCompanionAppDemo\iOSCompanionApp\Resources\App\
