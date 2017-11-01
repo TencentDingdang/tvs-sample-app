@@ -253,11 +253,11 @@ typedef NS_ENUM(NSUInteger, TVSAccountEvent) {
 -(BOOL)handleOpenUrl:(NSURL*)url;
 
 /*!
- * @brief 设置 TVS 授权回调
+ * @brief 添加 TVS 事件回调
  * @param accountDelegate TVSAccountDelegate
  * @warning 如果要接收授权回调事件，必须实现此协议
  */
--(void)setAuthDelegate:(id<TVSAccountDelegate>)accountDelegate;
+-(void)addCallback:(id<TVSAccountDelegate>)accountDelegate;
 
 /*!
  * @brief 检查微信 Token 是否存在
