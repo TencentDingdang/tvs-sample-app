@@ -10,7 +10,7 @@
 
 #import <TVSAccountSDK/TVSAccountSDK.h>
 
-@interface LoginController()<TVSAccountDelegate>
+@interface LoginController()
 @property(nonatomic,strong) UIButton *btnWXLogin, *btnQQLogin, *btnWXRefresh, *btnQQVerify, *btnLogout, *btnUserCenter;
 @property(nonatomic,strong) UITextView *textview;
 @end
@@ -60,7 +60,8 @@
     
     //测试环境
     [[TVSAccountSDK shared]setTestEnvironment:YES];
-    [[TVSAccountSDK shared]setAuthDelegate:self];
+    //接收 TVS 事件通知
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleTVSNotification:) name:TVSNotificationName object:nil];
 }
 
 //调用微信登录
@@ -113,6 +114,12 @@
     }
 }
 
+-(void)viewDidDisappear:(BOOL)anim {
+    //不再接收 TVS 事件通知
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:TVSNotificationName object:nil];
+    [super viewDidDisappear:anim];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
@@ -157,9 +164,10 @@
     }
 }
 
-#pragma mark TVSAuthDelegate
-
--(void)TVSAccountEvent:(TVSAccountEvent)event Success:(BOOL)success {
+-(void)handleTVSNotification:(NSNotification*)notify {
+    NSDictionary* data = notify.userInfo;
+    TVSAccountEvent event = [[data valueForKey:TVSNotificationKey_EVENT]intValue];
+    BOOL success = [[data valueForKey:TVSNotificationKey_SUCCESS]boolValue];
     [self refreshBtnStatus];
     switch (event) {
         case TVSAccountEventFetchWXToken: {

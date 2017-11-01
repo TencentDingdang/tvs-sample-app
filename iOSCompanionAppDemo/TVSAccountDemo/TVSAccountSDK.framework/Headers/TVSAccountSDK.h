@@ -13,15 +13,29 @@
 #import <UIKit/UIKit.h>
 
 /*!
+ * @brief TVS 通知名
+ */
+extern NSString* const TVSNotificationName;
+
+/*!
+ * @brief TVS 通知数据 EVENT 字段
+ */
+extern NSString* const TVSNotificationKey_EVENT;
+
+/*!
+ * @brief TVS 通知数据 SUCCESS 字段
+ */
+extern NSString* const TVSNotificationKey_SUCCESS;
+
+/*!
  * @brief 非法的 ClientId 常量
  */
-static NSString* const INVALID_CLIENT_ID = @"invalid clientId";
+extern NSString* const TVSInvalidClientId;
 
 /*!
  * @brief 非法的 RefreshToken 常量
  */
-static NSString* const INVALID_REFRESH_TOKEN = @"refreshToken";
-
+extern NSString* const TVSInvalidRefreshToken;
 
 
 /*!
@@ -203,25 +217,6 @@ typedef NS_ENUM(NSUInteger, TVSAccountEvent) {
 
 
 /*!
- * @protocol TVSAccountDelegate
- * @brief TVS 账户回调协议
- * @warning 必须实现本协议，否则无法收到相关事件回调
- */
-@protocol TVSAccountDelegate <NSObject>
-
-@required
-/*!
- * @brief 事件回调
- * @param event 事件类型
- * @param success 是否成功
- */
--(void)TVSAccountEvent:(TVSAccountEvent)event Success:(BOOL)success;
-
-@end
-
-
-
-/*!
  * @class TVSAccountSDK
  * @brief TVS 账号 sdk
  */
@@ -251,13 +246,6 @@ typedef NS_ENUM(NSUInteger, TVSAccountEvent) {
  * @return 是否成功处理相关 URL 跳转
  */
 -(BOOL)handleOpenUrl:(NSURL*)url;
-
-/*!
- * @brief 添加 TVS 事件回调
- * @param accountDelegate TVSAccountDelegate
- * @warning 如果要接收授权回调事件，必须实现此协议
- */
--(void)addCallback:(id<TVSAccountDelegate>)accountDelegate;
 
 /*!
  * @brief 检查微信 Token 是否存在
