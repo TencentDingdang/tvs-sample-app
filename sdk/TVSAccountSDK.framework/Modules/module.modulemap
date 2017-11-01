@@ -1,0 +1,6 @@
+framework module TVSAccountSDK {
+  umbrella header "TVSAccountSDK.h"
+
+  export *
+  module * { export * }
+}

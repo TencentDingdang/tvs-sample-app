@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		807632841FA88E450025B763 /* TVSAccountSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 807632831FA88E450025B763 /* TVSAccountSDK.framework */; };
-		807632851FA88E450025B763 /* TVSAccountSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 807632831FA88E450025B763 /* TVSAccountSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		80D052BC1FA9706000977FE6 /* TVSAccountSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80D052BB1FA9706000977FE6 /* TVSAccountSDK.framework */; };
+		80D052BD1FA9706000977FE6 /* TVSAccountSDK.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 80D052BB1FA9706000977FE6 /* TVSAccountSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8AD8081F1F3DB0E80040C9CF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AD8081E1F3DB0E80040C9CF /* main.m */; };
 		8AD808221F3DB0E80040C9CF /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AD808211F3DB0E80040C9CF /* AppDelegate.m */; };
 		8AD808251F3DB0E80040C9CF /* LoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AD808241F3DB0E80040C9CF /* LoginController.m */; };
@@ -24,7 +24,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				807632851FA88E450025B763 /* TVSAccountSDK.framework in Embed Frameworks */,
+				80D052BD1FA9706000977FE6 /* TVSAccountSDK.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -32,7 +32,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		807632831FA88E450025B763 /* TVSAccountSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TVSAccountSDK.framework; sourceTree = "<group>"; };
+		80D052BB1FA9706000977FE6 /* TVSAccountSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TVSAccountSDK.framework; sourceTree = "<group>"; };
 		8AD8081A1F3DB0E80040C9CF /* TVSAccountDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TVSAccountDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8AD8081E1F3DB0E80040C9CF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8AD808201F3DB0E80040C9CF /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -50,7 +50,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				807632841FA88E450025B763 /* TVSAccountSDK.framework in Frameworks */,
+				80D052BC1FA9706000977FE6 /* TVSAccountSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,7 +67,7 @@
 		8AD808111F3DB0E80040C9CF = {
 			isa = PBXGroup;
 			children = (
-				807632831FA88E450025B763 /* TVSAccountSDK.framework */,
+				80D052BB1FA9706000977FE6 /* TVSAccountSDK.framework */,
 				8AD8081C1F3DB0E80040C9CF /* TVSAccountDemo */,
 				8AD8081B1F3DB0E80040C9CF /* Products */,
 				8A9738311F418BBD003BD45B /* Frameworks */,
@@ -319,6 +319,7 @@
 				DEVELOPMENT_TEAM = 5TNCWX532Z;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(PROJECT_DIR)/",
 					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "";
@@ -339,6 +340,7 @@
 				DEVELOPMENT_TEAM = 5TNCWX532Z;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"$(PROJECT_DIR)/",
 					"$(PROJECT_DIR)",
 				);
 				HEADER_SEARCH_PATHS = "";

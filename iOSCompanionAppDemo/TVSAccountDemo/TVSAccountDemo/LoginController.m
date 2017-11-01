@@ -8,11 +8,9 @@
 
 #import "LoginController.h"
 
-#import <TVSAccountSDK/TVSAuth.h>
-#import <TVSAccountSDK/TVSUserCenter.h>
-#import <TVSAccountSDK/TVSEnvironment.h>
+#import <TVSAccountSDK/TVSAccountSDK.h>
 
-@interface LoginController()<TVSAuthDelegate,TVSUserCenterDelegate>
+@interface LoginController()<TVSAccountDelegate>
 @property(nonatomic,strong) UIButton *btnWXLogin, *btnQQLogin, *btnWXRefresh, *btnQQVerify, *btnLogout, *btnUserCenter;
 @property(nonatomic,strong) UITextView *textview;
 @end
@@ -61,47 +59,46 @@
     [self.view addSubview:_textview];
     
     //测试环境
-    [[TVSEnvironment shared]setTest:YES];
-    [[TVSAuth shared]setAuthDelegate:self];
-    [[TVSUserCenter shared]setDelegate:self];
+    [[TVSAccountSDK shared]setTestEnvironment:YES];
+    [[TVSAccountSDK shared]setAuthDelegate:self];
 }
 
 //调用微信登录
 -(void)onClickWXLogin:(id)sender {
-    [[TVSAuth shared]loginWithWX];
+    [[TVSAccountSDK shared]loginWithWX];
 }
 
 //刷新微信token(已登录情况下)
 -(void)onClickWXRefresh:(id)sender {
-    [[TVSAuth shared]refreshWXToken];
+    [[TVSAccountSDK shared]refreshWXToken];
 }
 
 //调用QQ登录
 -(void)onClickQQLogin:(id)sender {
-    [[TVSAuth shared]loginWithQQ];
+    [[TVSAccountSDK shared]loginWithQQ];
 }
 
 //验证QQ token(已登录情况下)
 -(void)onClickQQVerify:(id)sender {
-    [[TVSAuth shared]verifyQQToken];
+    [[TVSAccountSDK shared]verifyQQToken];
 }
 
 //注销登录
 -(void)onClickLogout:(id)sender {
-    [[TVSAuth shared]logout];
+    [[TVSAccountSDK shared]logout];
     [self refreshBtnStatus];
 }
 
 -(void)onClickUserCenter:(id)sender {
     //进入个人中心页面
-    [[TVSUserCenter shared]enterFromViewController:self];
+    [[TVSAccountSDK shared]enterUserCenterPageFromViewController:self];
     
-    if ([TVSAuth shared].isWXTokenExist || [TVSAuth shared].isQQTokenExist) {//必须先登录
+    if ([TVSAccountSDK shared].isWXTokenExist || [TVSAccountSDK shared].isQQTokenExist) {//必须先登录
         //获取用于绑定手机号的验证码
-        [[TVSUserCenter shared]getCaptchaWithPhoneNumber:@"13987654321"];
+        [[TVSAccountSDK shared]getCaptchaWithPhoneNumber:@"13987654321"];
         
         //绑定手机号
-        [[TVSUserCenter shared]bindPhoneNumber:@"13987654321" Captcha:@"123456"];
+        [[TVSAccountSDK shared]bindPhoneNumber:@"13987654321" Captcha:@"123456"];
         
         //绑定地址
         TVSGeoLocation* loc = [TVSGeoLocation new];
@@ -109,10 +106,10 @@
         loc.addr = @"深南大道9988号";
         loc.lat = @"23.0";
         loc.lng = @"80.0";
-        [[TVSUserCenter shared]bindHomeLocation:loc CompanyLocation:loc];
+        [[TVSAccountSDK shared]bindHomeLocation:loc CompanyLocation:loc];
         
         //查询地址
-        [[TVSUserCenter shared]queryLocation];
+        [[TVSAccountSDK shared]queryLocation];
     }
 }
 
@@ -131,13 +128,13 @@
 }
 
 -(void)refreshBtnStatus {
-    if ([[TVSAuth shared]isWXTokenExist]) {//是否微信登录
+    if ([[TVSAccountSDK shared]isWXTokenExist]) {//是否微信登录
         _btnWXLogin.enabled = NO;
         _btnWXRefresh.enabled = YES;
         _btnQQLogin.enabled = NO;
         _btnQQVerify.enabled = NO;
         _btnLogout.enabled = YES;
-    } else if ([[TVSAuth shared]isQQTokenExist]) {//是否QQ登录
+    } else if ([[TVSAccountSDK shared]isQQTokenExist]) {//是否QQ登录
         _btnWXLogin.enabled = NO;
         _btnWXRefresh.enabled = NO;
         _btnQQLogin.enabled = NO;
@@ -162,46 +159,48 @@
 
 #pragma mark TVSAuthDelegate
 
--(void)TVSAuthEvent:(TVSAuthEvent)event Success:(BOOL)success {
+-(void)TVSAccountEvent:(TVSAccountEvent)event Success:(BOOL)success {
     [self refreshBtnStatus];
     switch (event) {
-        case TVSAuthEventFetchWXToken: {
+        case TVSAccountEventFetchWXToken: {
             [self textViewAppendText:[NSString stringWithFormat:@"获取微信 Token %@", success ? @"成功" : @"失败"]];
             break;
         }
-        case TVSAuthEventRefreshWXToken: {
+        case TVSAccountEventRefreshWXToken: {
             [self textViewAppendText:[NSString stringWithFormat:@"刷新微信 Token %@", success ? @"成功" : @"失败"]];
             break;
         }
-        case TVSAuthEventVerifyQQToken: {
+        case TVSAccountEventVerifyQQToken: {
             [self textViewAppendText:[NSString stringWithFormat:@"验证 QQ Token %@", success ? @"成功" : @"失败"]];
             break;
         }
-        case TVSAuthEventFetchId: {
-            TVSAccountInfo* accountInfo = [TVSAuth shared].accountInfo;//读取账号信息
-            TVSUserInfo* userInfo = [TVSAuth shared].userInfo;//读取用户资料
+        case TVSAccountEventFetchTvsId: {
+            TVSAccountInfo* accountInfo = [TVSAccountSDK shared].accountInfo;//读取账号信息
+            TVSUserInfo* userInfo = [TVSAccountSDK shared].userInfo;//读取用户资料
             [self textViewAppendText:[NSString stringWithFormat:@"%@%@", success ? @"获取 ClientId 成功:\n" : @"获取 ClientId 失败:\n", accountInfo.clientId]];
             break;
         }
+        case TVSAccountEventGetCaptcha: {
+            [self textViewAppendText:[NSString stringWithFormat:@"获取验证码:%d", success]];
+            break;
+        }
+        case TVSAccountEventBindPhoneNumber: {
+            [self textViewAppendText:[NSString stringWithFormat:@"绑定手机号:%d", success]];
+            break;
+        }
+        case TVSAccountEventBindLocation: {
+            [self textViewAppendText:[NSString stringWithFormat:@"绑定地址:%d", success]];
+            break;
+        }
+        case TVSAccountEventQueryLocation: {
+            [self textViewAppendText:[NSString stringWithFormat:@"地址查询:%d", success]];
+            if (success) {
+                TVSGeoLocation* homeLoc = [[TVSAccountSDK shared]userInfo].homeLocation;
+                TVSGeoLocation* compoanyLoc = [[TVSAccountSDK shared]userInfo].companyLocation;
+            }
+            break;
+        }
     }
-}
-
-#pragma mark TVSUserCenterDelegate
-
--(void)TVSUserCenterResponseGetCaptcha:(BOOL)success {
-    [self textViewAppendText:[NSString stringWithFormat:@"获取验证码:%d", success]];
-}
-
--(void)TVSUserCenterResponseBindPhoneNumber:(BOOL)success {
-    [self textViewAppendText:[NSString stringWithFormat:@"绑定手机号:%d", success]];
-}
-
--(void)TVSUserCenterResponseBindLocation:(BOOL)success {
-    [self textViewAppendText:[NSString stringWithFormat:@"绑定地址:%d", success]];
-}
-
--(void)TVSUserCenterResponseHomeLocation:(NSArray<TVSGeoLocation *> *)homeLocations CompanyLocation:(NSArray<TVSGeoLocation *> *)companyLocations {
-    [self textViewAppendText:[NSString stringWithFormat:@"地址查询 home:%@ \n company:%@", homeLocations, companyLocations]];
 }
 
 @end

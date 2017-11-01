@@ -7,21 +7,21 @@
 //
 
 #import "AppDelegate.h"
-#import <TVSAccountSDK/TVSAuth.h>
+#import <TVSAccountSDK/TVSAccountSDK.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [[TVSAuth shared]registerApp];
+    [[TVSAccountSDK shared]registerApp];
     return YES;
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    return [[TVSAuth shared] handleOpenUrl:url];
+    return [[TVSAccountSDK shared] handleOpenUrl:url];
 }
 
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-    return [[TVSAuth shared]handleOpenUrl:url];
+    return [[TVSAccountSDK shared]handleOpenUrl:url];
 }
 
 
