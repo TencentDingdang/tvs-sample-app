@@ -13,21 +13,6 @@
 #import <UIKit/UIKit.h>
 
 /*!
- * @brief TVS 通知名
- */
-extern NSString* const TVSNotificationName;
-
-/*!
- * @brief TVS 通知数据 EVENT 字段
- */
-extern NSString* const TVSNotificationKey_EVENT;
-
-/*!
- * @brief TVS 通知数据 SUCCESS 字段
- */
-extern NSString* const TVSNotificationKey_SUCCESS;
-
-/*!
  * @brief 非法的 ClientId 常量
  */
 extern NSString* const TVSInvalidClientId;
@@ -36,6 +21,51 @@ extern NSString* const TVSInvalidClientId;
  * @brief 非法的 RefreshToken 常量
  */
 extern NSString* const TVSInvalidRefreshToken;
+
+/*!
+ * @brief TVS 通知名
+ */
+extern NSString* const TVSNotificationName;
+
+/*!
+ * @brief TVS 通知 事件
+ */
+extern NSString* const TVSNotificationKey_EVENT;
+
+/*!
+ * @brief TVS 通知 结果
+ */
+extern NSString* const TVSNotificationKey_SUCCESS;
+
+
+
+/*!
+ * @brief 接收 TVS 事件通知
+ * @warning 必须注册才能接收 TVS 事件回调
+ * @param sel 通知处理方法 selector
+ */
+#define TVSNotificationAddObserver(sel) [[NSNotificationCenter defaultCenter]addObserver:self selector:sel name:TVSNotificationName object:nil]
+
+/*!
+ * @brief 不再接收 TVS 事件通知
+ * @warning 请在必要的时候（如viewDidDisappear）取消注册
+ */
+#define TVSNotificationRemoveObserver() [[NSNotificationCenter defaultCenter]removeObserver:self name:TVSNotificationName object:nil]
+
+/*!
+ * @brief 用于在 TVS 通知回调方法中取出 TVSAccountEvent（事件类型）
+ * @param notify NSNotification 对象
+ * @return TVSAccountEvent
+ */
+#define TVSNotificationGetEvent(notify) [[notify.userInfo valueForKey:TVSNotificationKey_EVENT]intValue]
+
+/*!
+ * @brief 用于在 TVS 通知回调方法中取出 SUCCESS（是否成功）
+ * @param notify NSNotification 对象
+ * @return SUCCESS
+ */
+#define TVSNotificationGetSuccess(notify) [[notify.userInfo valueForKey:TVSNotificationKey_SUCCESS]boolValue]
+
 
 
 /*!

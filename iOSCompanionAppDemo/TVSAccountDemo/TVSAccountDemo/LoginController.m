@@ -61,7 +61,7 @@
     //测试环境
     [[TVSAccountSDK shared]setTestEnvironment:YES];
     //接收 TVS 事件通知
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(handleTVSNotification:) name:TVSNotificationName object:nil];
+    TVSNotificationAddObserver(@selector(handleTVSNotification:));
 }
 
 //调用微信登录
@@ -116,7 +116,7 @@
 
 -(void)viewDidDisappear:(BOOL)anim {
     //不再接收 TVS 事件通知
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:TVSNotificationName object:nil];
+    TVSNotificationRemoveObserver();
     [super viewDidDisappear:anim];
 }
 
@@ -165,9 +165,8 @@
 }
 
 -(void)handleTVSNotification:(NSNotification*)notify {
-    NSDictionary* data = notify.userInfo;
-    TVSAccountEvent event = [[data valueForKey:TVSNotificationKey_EVENT]intValue];
-    BOOL success = [[data valueForKey:TVSNotificationKey_SUCCESS]boolValue];
+    TVSAccountEvent event = TVSNotificationGetEvent(notify);
+    BOOL success = TVSNotificationGetSuccess(notify);
     [self refreshBtnStatus];
     switch (event) {
         case TVSAccountEventFetchWXToken: {
