@@ -111,7 +111,12 @@ typedef NS_ENUM(NSUInteger, TVSAccountEvent) {
     /*!
      * @brief 查询地址事件
      */
-    TVSAccountEventQueryLocation
+    TVSAccountEventQueryLocation,
+    
+    /*!
+     * @brief 绑定设备 push 信息事件
+     */
+    TVSAccountEventBindPushInfo
 };
 
 
@@ -332,6 +337,7 @@ typedef NS_ENUM(NSUInteger, TVSAccountEvent) {
 
 /*!
  * @brief 打开用户中心页面
+ * @warning 暂时只支持微信登录和微信支付
  * @param viewController 起始ViewController
  */
 -(void)enterUserCenterPageFromViewController:(UIViewController*)viewController;
@@ -345,17 +351,17 @@ typedef NS_ENUM(NSUInteger, TVSAccountEvent) {
 
 /*!
  * @brief 绑定手机号
+ * @warning 必须确保已登录
  * @param phoneNumber 手机号
  * @param captcha 验证码
- * @warning 必须确保已登录
  */
 -(void)bindPhoneNumber:(NSString*)phoneNumber Captcha:(NSString*)captcha;
 
 /*!
  * @brief 绑定地址
+ * @warning 必须确保已登录
  * @param homeLoc 家庭地址
  * @param companyLoc 公司地址
- * @warning 必须确保已登录
  */
 -(void)bindHomeLocation:(TVSGeoLocation*)homeLoc CompanyLocation:(TVSGeoLocation*)companyLoc;
 
@@ -364,5 +370,21 @@ typedef NS_ENUM(NSUInteger, TVSAccountEvent) {
  * @warning 必须确保已登录
  */
 -(void)queryLocation;
+
+/*!
+ * @brief 绑定用于 Push 的设备相关信息
+ * @warning 必须确保已登录
+ * @param guid 设备唯一标识
+ * @param pushId
+ * @param pushIdExtra
+ * @param qua
+ * @param imei 设备 IMEI
+ * @param lc License
+ * @param mac 设备 MAC 地址
+ * @param qimei
+ * @param enrollTime 设备注册 CT 时间
+ * @param bindTime 设备绑定 CT 时间
+ */
+-(void)bindPushInfoWithGuid:(NSString*)guid PushId:(NSString*)pushId PushIdExtra:(NSString*)pushIdExtra Qua:(NSString*)qua IMEI:(NSString*)imei LC:(NSString*)lc MAC:(NSString*)mac QIMEI:(NSString*)qimei EnrollTime:(NSInteger)enrollTime BindTime:(NSInteger)bindTime;
 
 @end
