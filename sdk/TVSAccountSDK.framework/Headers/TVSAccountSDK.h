@@ -22,50 +22,6 @@ extern NSString* const TVSInvalidClientId;
  */
 extern NSString* const TVSInvalidRefreshToken;
 
-/*!
- * @brief TVS 通知名
- */
-extern NSString* const TVSNotificationName;
-
-/*!
- * @brief TVS 通知 事件
- */
-extern NSString* const TVSNotificationKey_EVENT;
-
-/*!
- * @brief TVS 通知 结果
- */
-extern NSString* const TVSNotificationKey_SUCCESS;
-
-
-
-/*!
- * @brief 接收 TVS 事件通知
- * @warning 必须注册才能接收 TVS 事件回调
- * @param sel 通知处理方法 selector
- */
-#define TVSNotificationAddObserver(sel) [[NSNotificationCenter defaultCenter]addObserver:self selector:sel name:TVSNotificationName object:nil]
-
-/*!
- * @brief 不再接收 TVS 事件通知
- * @warning 请在必要的时候（如viewDidDisappear）取消注册
- */
-#define TVSNotificationRemoveObserver() [[NSNotificationCenter defaultCenter]removeObserver:self name:TVSNotificationName object:nil]
-
-/*!
- * @brief 用于在 TVS 通知回调方法中取出 TVSAccountEvent（事件类型）
- * @param notify NSNotification 对象
- * @return TVSAccountEvent
- */
-#define TVSNotificationGetEvent(notify) [[notify.userInfo valueForKey:TVSNotificationKey_EVENT]intValue]
-
-/*!
- * @brief 用于在 TVS 通知回调方法中取出 SUCCESS（是否成功）
- * @param notify NSNotification 对象
- * @return SUCCESS
- */
-#define TVSNotificationGetSuccess(notify) [[notify.userInfo valueForKey:TVSNotificationKey_SUCCESS]boolValue]
-
 
 
 /*!
@@ -252,6 +208,71 @@ typedef NS_ENUM(NSUInteger, TVSAccountEvent) {
 
 
 /*!
+ * @class TVSDevice
+ * @brief 集成了叮当语音服务的设备
+ */
+@interface TVSDevice : NSObject
+
+/*!
+ * @brief 设备名
+ */
+@property(nonatomic,copy) NSString* deviceName;
+
+/*!
+ * @brief 厂商
+ */
+@property(nonatomic,copy) NSString* manufacturer;
+
+/*!
+ * @brief 品牌图标
+ */
+@property(nonatomic,copy) NSString* brandIconUrl;
+
+/*!
+ * @brief 设备号
+ */
+@property(nonatomic,copy) NSString* DSN;
+
+/*!
+ * @brief MAC地址
+ */
+@property(nonatomic,copy) NSString* MAC;
+
+/*!
+ * @brief openId
+ */
+@property(nonatomic,copy) NSString* openId;
+
+/*!
+ * @brief 包名
+ */
+@property(nonatomic,copy) NSString* package;
+
+/*!
+ * @brief 操作系统
+ */
+@property(nonatomic,copy) NSString* OS;
+
+/*!
+ * @brief 全局唯一标识
+ */
+@property(nonatomic,copy) NSString* guid;
+
+/*!
+ * @brief 设备类型
+ */
+@property(nonatomic,assign) NSInteger type;
+
+/*!
+ * @brief 是否已绑定叮当APP
+ */
+@property(nonatomic,assign) BOOL isbinded;
+
+@end
+
+
+
+/*!
  * @class TVSAccountSDK
  * @brief TVS 账号 sdk
  */
@@ -260,7 +281,7 @@ typedef NS_ENUM(NSUInteger, TVSAccountEvent) {
 /*!
  * @brief 是否测试环境
  */
-@property (nonatomic,assign) BOOL testEnvironment;
+@property(nonatomic,assign) BOOL testEnvironment;
 
 /*!
  * @brief 获得 TVS 授权帮助类单例对象
@@ -297,26 +318,30 @@ typedef NS_ENUM(NSUInteger, TVSAccountEvent) {
 /*!
  * @brief 微信登录
  * @warning 如果微信 token 不存在，则必须调用此方法，以获得 TVS 后台返回的相关账户信息
+ * @param handler 回调
  */
--(void)loginWithWX;
+-(void)wxLoginWithHandler:(void(^)(BOOL))handler;
 
 /*!
  * @brief QQ 登录
  * @warning 如果 QQ token 不存在，则必须调用此方法，以获得 TVS 后台返回的相关账户信息
+ * @param handler 回调
  */
--(void)loginWithQQ;
+-(void)qqLoginWithHandler:(void(^)(BOOL))handler;
 
 /*!
  * @brief 刷新微信 Token
  * @warning 如果微信 token 存在，则必须调用此方法，以获得(更新) TVS 后台返回的相关账户信息
+ * @param handler 回调
  */
--(void)refreshWXToken;
+-(void)wxTokenRefreshWithHandler:(void(^)(BOOL))handler;
 
 /*!
  * @brief 验证 QQ Token
  * @warning 如果 QQ token 存在，则必须调用此方法，以获得(更新) TVS 后台返回的相关账户信息
+ * @param handler 回调
  */
--(void)verifyQQToken;
+-(void)qqTokenVerifyWithHandler:(void(^)(BOOL))handler;
 
 /*!
  * @brief 获取账号信息
@@ -346,45 +371,65 @@ typedef NS_ENUM(NSUInteger, TVSAccountEvent) {
  * @brief 获取用于绑定手机号的验证码
  * @warning 必须确保已登录
  * @param phoneNumber 手机号
+ * @param handler 回调
  */
--(void)getCaptchaWithPhoneNumber:(NSString*)phoneNumber;
+-(void)getCaptchaWithPhoneNumber:(NSString*)phoneNumber handler:(void(^)(BOOL))handler;
 
 /*!
  * @brief 绑定手机号
  * @warning 必须确保已登录
  * @param phoneNumber 手机号
  * @param captcha 验证码
+ * @param handler 回调
  */
--(void)bindPhoneNumber:(NSString*)phoneNumber Captcha:(NSString*)captcha;
+-(void)bindPhoneNumber:(NSString*)phoneNumber captcha:(NSString*)captcha handler:(void(^)(BOOL))handler;
 
 /*!
  * @brief 绑定地址
  * @warning 必须确保已登录
  * @param homeLoc 家庭地址
  * @param companyLoc 公司地址
+ * @param handler 回调
  */
--(void)bindHomeLocation:(TVSGeoLocation*)homeLoc CompanyLocation:(TVSGeoLocation*)companyLoc;
+-(void)bindHomeLocation:(TVSGeoLocation*)homeLoc companyLocation:(TVSGeoLocation*)companyLoc handler:(void(^)(BOOL))handler;
 
 /*!
  * @brief 查询地址
  * @warning 必须确保已登录
+ * @param handler 回调
  */
--(void)queryLocation;
+-(void)queryLocationWithHandler:(void(^)(NSArray*,NSArray*))handler;
 
 /*!
- * @brief 绑定用于 Push 的设备相关信息
+ * @brief 绑定 Push 相关信息
  * @warning 必须确保已登录
- * @param guid 设备唯一标识
+ * @param guid 
  * @param pushId
  * @param pushIdExtra
- * @param qua
- * @param imei 设备 IMEI
- * @param lc License
- * @param mac 设备 MAC 地址
- * @param qimei
- * @param enrollTime 设备注册 CT 时间
- * @param bindTime 设备绑定 CT 时间
+ * @param qua 设备QUA(APP可传nil)
+ * @param imei 设备 IMEI(APP可传nil)
+ * @param lc 设备License(APP可传nil)
+ * @param mac 设备 MAC 地址(APP可传nil)
+ * @param qimei 设备QIMEI(APP可传nil)
+ * @param isApp 是否App
+ * @param handler 回调
  */
--(void)bindPushInfoWithGuid:(NSString*)guid PushId:(NSString*)pushId PushIdExtra:(NSString*)pushIdExtra Qua:(NSString*)qua IMEI:(NSString*)imei LC:(NSString*)lc MAC:(NSString*)mac QIMEI:(NSString*)qimei EnrollTime:(NSInteger)enrollTime BindTime:(NSInteger)bindTime;
+-(void)bindPushInfoWithGuid:(NSString*)guid pushId:(NSString*)pushId pushIdExtra:(NSString*)pushIdExtra qua:(NSString*)qua imei:(NSString*)imei lc:(NSString*)lc mac:(NSString*)mac qimei:(NSString*)qimei isApp:(BOOL)isApp handler:(void(^)(BOOL))handler;
+
+/*!
+ * @brief 扫描当前无线局域网内(集成了叮当语音服务)的设备(音箱、电视、耳机等)
+ * @param handler 回调
+ */
+-(void)discoverWlanDevicesWithHandler:(void(^)(TVSDevice*))handler;
+
+/*!
+ * @brief (APP绑定设备成功后)将账号信息同步给设备
+ * @warning 必须确保APP已登录
+ * @param deviceIp 扫描到的局域网设备IP地址
+ * @param bundleId App bundleId
+ * @param guid app guid
+ */
+-(void)sendAccountInfoToDeviceIp:(NSString*)deviceIp bundleId:(NSString*)bundleId guid:(NSString*)guid;
 
 @end
+
