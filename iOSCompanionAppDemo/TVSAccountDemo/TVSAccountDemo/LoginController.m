@@ -120,16 +120,6 @@
 //    }
 }
 
--(UIButton*)ButtonWithFrame:(CGRect)frame text:(NSString*)text selector:(SEL)selector {
-    UIButton* btn = [[UIButton alloc]initWithFrame:frame];
-    [btn setTitleColor:self.view.tintColor forState:UIControlStateNormal];
-    [btn setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
-    [btn.titleLabel setFont:[UIFont systemFontOfSize:15]];
-    [btn addTarget:self action:selector forControlEvents:UIControlEventTouchUpInside];
-    [btn setTitle:text forState:UIControlStateNormal];
-    return btn;
-}
-
 -(void)refreshBtnStatus {
     if ([[TVSAccountSDK shared]isWXTokenExist]) {//是否微信登录
         _btnWXLogin.enabled = NO;
