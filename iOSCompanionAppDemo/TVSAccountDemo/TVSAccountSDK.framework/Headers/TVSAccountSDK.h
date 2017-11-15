@@ -181,6 +181,11 @@ extern NSString* const TVSInvalidRefreshToken;
 @interface TVSDevice : NSObject
 
 /*!
+ * @brief 设备(无线局域网)IP 地址，用于后续设备绑定
+ */
+@property(nonatomic,copy) NSString* deviceWlanIP;
+
+/*!
  * @brief 设备名
  */
 @property(nonatomic,copy) NSString* deviceName;
@@ -408,8 +413,9 @@ extern NSString* const TVSInvalidRefreshToken;
  * @param deviceIp 扫描到的局域网设备IP地址
  * @param bundleId App bundleId
  * @param guid app guid
+ *@param handler 回调
  */
--(void)sendAccountInfoToDeviceIp:(NSString*)deviceIp bundleId:(NSString*)bundleId guid:(NSString*)guid;
+-(void)sendAccountInfoToDeviceIp:(NSString*)deviceIp bundleId:(NSString*)bundleId guid:(NSString*)guid handler:(void(^)(BOOL))handler;
 
 @end
 
