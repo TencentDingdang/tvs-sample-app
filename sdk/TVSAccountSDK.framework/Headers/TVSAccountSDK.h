@@ -22,6 +22,21 @@ extern NSString* const TVSInvalidClientId;
  */
 extern NSString* const TVSInvalidRefreshToken;
 
+/*!
+ * @brief 设备绑定结果：成功
+ */
+extern int const TVSBindDeviceResultSuccess;
+
+/*!
+ * @brief 设备绑定结果：已被绑定
+ */
+extern int const TVSBindDeviceResultHasBinded;
+
+/*!
+ * @brief 设备绑定结果：参数格式错误
+ */
+extern int const TVSBindDeviceResultParamsInvalid;
+
 
 
 /*!
@@ -349,8 +364,9 @@ extern NSString* const TVSInvalidRefreshToken;
  * @brief 打开用户中心页面
  * @warning 暂时只支持微信登录和微信支付
  * @param viewController 起始ViewController
+ * @return 是否成功，失败可能是因为 viewController 为空，或者 Info.plist 没有配置 Device 相关字段
  */
--(void)enterUserCenterPageFromViewController:(UIViewController*)viewController;
+-(BOOL)enterUserCenterPageFromViewController:(UIViewController*)viewController;
 
 /*!
  * @brief 获取用于绑定手机号的验证码
@@ -415,7 +431,7 @@ extern NSString* const TVSInvalidRefreshToken;
  * @param guid app guid
  *@param handler 回调
  */
--(void)sendAccountInfoToDeviceIp:(NSString*)deviceIp bundleId:(NSString*)bundleId guid:(NSString*)guid handler:(void(^)(BOOL))handler;
+-(void)sendAccountInfoToDeviceIp:(NSString*)deviceIp bundleId:(NSString*)bundleId guid:(NSString*)guid handler:(void(^)(int))handler;
 
 @end
 
