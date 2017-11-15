@@ -25,59 +25,6 @@ extern NSString* const TVSInvalidRefreshToken;
 
 
 /*!
- * @typedef TVSEvent
- * @brief TVS 事件
- */
-typedef NS_ENUM(NSUInteger, TVSAccountEvent) {
-    /*!
-     * @brief 获取微信 Token 事件
-     */
-    TVSAccountEventFetchWXToken,
-    
-    /*!
-     * @brief 刷新微信 Token 事件
-     */
-    TVSAccountEventRefreshWXToken,
-    
-    /*!
-     * @brief 验证 QQ token 事件
-     */
-    TVSAccountEventVerifyQQToken,
-    
-    /*!
-     * @brief 获取 TVSID 事件
-     */
-    TVSAccountEventFetchTvsId,
-    
-    /*!
-     * @brief 获取验证码事件
-     */
-    TVSAccountEventGetCaptcha,
-    
-    /*!
-     * @brief 绑定手机号事件
-     */
-    TVSAccountEventBindPhoneNumber,
-    
-    /*!
-     * @brief 绑定地址事件
-     */
-    TVSAccountEventBindLocation,
-    
-    /*!
-     * @brief 查询地址事件
-     */
-    TVSAccountEventQueryLocation,
-    
-    /*!
-     * @brief 绑定设备 push 信息事件
-     */
-    TVSAccountEventBindPushInfo
-};
-
-
-
-/*!
  * @class TVSAccountInfo
  * @brief 账号信息
  */
