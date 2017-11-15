@@ -158,6 +158,26 @@ typedef NS_ENUM(NSUInteger, TVSAccountEvent) {
  */
 @property (nonatomic,copy) NSString* lat;
 
+/*!
+ * @brief (打车点)名称
+ */
+@property (nonatomic,copy) NSString* cabName;
+
+/*!
+ * @brief (打车点)地址
+ */
+@property (nonatomic,copy) NSString* cabAddr;
+
+/*!
+ * @brief (打车点)经度
+ */
+@property (nonatomic,copy) NSString* cabLng;
+
+/*!
+ * @brief (打车点)纬度
+ */
+@property (nonatomic,copy) NSString* cabLat;
+
 @end
 
 
@@ -321,6 +341,19 @@ typedef NS_ENUM(NSUInteger, TVSAccountEvent) {
  * @param handler 回调
  */
 -(void)wxLoginWithHandler:(void(^)(BOOL))handler;
+
+/*!
+ * @brief 微信支付
+ * @warning 注意后台生成的订单类型必须是app支付，不能是h5订单，否则微信会报错“支付场景非法”
+ * @param partnerid (后台生成的微信支付订单)partnerid
+ * @param prepayid (后台生成的微信支付订单)prepayid
+ * @param package (后台生成的微信支付订单)package
+ * @param noncestr (后台生成的微信支付订单)noncestr
+ * @param sign (后台生成的微信支付订单)sign
+ * @param timestamp (后台生成的微信支付订单)timestamp
+ * @param handler 回调
+ */
+-(void)wxPayWithPartnerid:(NSString*)partnerid prepayid:(NSString*)prepayid package:(NSString*)package noncestr:(NSString*)noncestr sign:(NSString*)sign timestamp:(UInt32)timestamp handler:(void(^)(BOOL,NSString*))handler;
 
 /*!
  * @brief QQ 登录
