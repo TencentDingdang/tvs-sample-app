@@ -277,10 +277,12 @@ extern int const TVSBindDeviceResultParamsInvalid;
 +(instancetype)shared;
 
 /*!
- * @brief 注册 App (自动从 Info.plist 读取相关参数)
+ * @brief 初始化 (自动从 Info.plist 读取相关参数)
  * @warning 必须在 AppDelegate 的 application:didFinishLaunchingWithOptions: 方法中调用
+ * @param dsn 设备序列号
+ * @param productId TVS平台申请的产品ID
  */
--(void)registerApp;
+-(void)registerWithDSN:(NSString*)dsn productId:(NSString*)productId;
 
 /*!
  * @brief 处理 URL 跳转

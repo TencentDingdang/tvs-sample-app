@@ -12,7 +12,7 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    [[TVSAccountSDK shared]registerApp];
+    [[TVSAccountSDK shared]registerWithDSN:@"mDSN" productId:@"mProductId"];
     return YES;
 }
 

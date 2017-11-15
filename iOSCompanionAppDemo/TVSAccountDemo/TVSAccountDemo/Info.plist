@@ -39,8 +39,6 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>DSN</key>
-	<string>mDSN</string>
 	<key>DeviceId</key>
 	<string>mDeviceId</string>
 	<key>DeviceOem</key>
@@ -69,8 +67,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>ProductId</key>
-	<string>mProductId</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
