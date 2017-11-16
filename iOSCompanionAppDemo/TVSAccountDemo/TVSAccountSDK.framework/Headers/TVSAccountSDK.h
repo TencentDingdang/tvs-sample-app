@@ -81,14 +81,18 @@ extern int const TVSBindDeviceResultParamsInvalid;
 @property(nonatomic,copy) NSString* tvsId;
 
 /*!
- * @brief ClientId
- */
-@property(nonatomic,copy) NSString* clientId;
-
-/*!
  * @brief userid
  */
 @property(nonatomic,copy) NSString* userId;
+
+/*!
+ * @brief 获取 TVS ClientId
+ * @warning 必须确保已登录，并且 dsn 和 productId 不为空
+ * @param dsn 设备序列号
+ * @param productId TVS平台申请的产品ID
+ * @return TVS ClientId
+ */
++(NSString*)clientIdWithDSN:(NSString*)dsn productId:(NSString*)productId;
 
 @end
 
@@ -279,10 +283,8 @@ extern int const TVSBindDeviceResultParamsInvalid;
 /*!
  * @brief 初始化 (自动从 Info.plist 读取相关参数)
  * @warning 必须在 AppDelegate 的 application:didFinishLaunchingWithOptions: 方法中调用
- * @param dsn 设备序列号
- * @param productId TVS平台申请的产品ID
  */
--(void)registerWithDSN:(NSString*)dsn productId:(NSString*)productId;
+-(void)registerApp;
 
 /*!
  * @brief 处理 URL 跳转
@@ -347,12 +349,14 @@ extern int const TVSBindDeviceResultParamsInvalid;
 
 /*!
  * @brief 获取账号信息
+ * @warning 必须在已登录状态调用
  * @return accountInfo
  */
 -(TVSAccountInfo*)accountInfo;
 
 /*!
  * @brief 获取用户信息
+ * @warning 必须在已登录状态调用
  * @return userInfo
  */
 -(TVSUserInfo*)userInfo;

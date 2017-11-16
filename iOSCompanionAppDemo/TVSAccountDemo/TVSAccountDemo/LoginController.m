@@ -40,16 +40,22 @@
 //调用微信登录
 - (IBAction)onClickBtnWXLogin:(id)sender {
     [[TVSAccountSDK shared]wxLoginWithHandler:^(BOOL success){
+        [self showText:[NSString stringWithFormat:@"微信登录%@", success ? @"成功" : @"失败"]];
+        if (success) {
+            [self readAccountUserInfo];
+        }
         [self refreshBtnStatus];
-        [self textViewAppendText:[NSString stringWithFormat:@"微信登录%@", success ? @"成功" : @"失败"]];
     }];
 }
 
 //刷新微信token(已登录情况下)
 - (IBAction)onClickBtnWXToken:(id)sender {
     [[TVSAccountSDK shared]wxTokenRefreshWithHandler:^(BOOL success){
+        [self showText:[NSString stringWithFormat:@"微信 token 刷新%@", success ? @"成功" : @"失败"]];
+        if (success) {
+            [self readAccountUserInfo];
+        }
         [self refreshBtnStatus];
-        [self textViewAppendText:[NSString stringWithFormat:@"微信token刷新%@", success ? @"成功" : @"失败"]];
     }];
 }
 
@@ -57,9 +63,9 @@
 - (IBAction)onClickWXPay:(id)sender {
     [[TVSAccountSDK shared]wxPayWithPartnerid:@"partnerid" prepayid:@"prepayid" package:@"package" noncestr:@"noncestr" sign:@"sign" timestamp:123456789 handler:^(BOOL success, NSString* key){
         if (success) {
-            [self textViewAppendText:[NSString stringWithFormat:@"微信支付成功：%@", key]];
+            [self showText:[NSString stringWithFormat:@"微信支付成功：%@", key]];
         } else {
-            [self textViewAppendText:@"微信支付失败"];
+            [self showText:@"微信支付失败"];
         }
     }];
 }
@@ -67,23 +73,40 @@
 //调用QQ登录
 - (IBAction)onClickQQLogin:(id)sender {
     [[TVSAccountSDK shared]qqLoginWithHandler:^(BOOL success){
+        [self showText:[NSString stringWithFormat:@"QQ 登录%@",  success ? @"成功" : @"失败"]];
+        if (success) {
+            [self readAccountUserInfo];
+        }
         [self refreshBtnStatus];
-        [self textViewAppendText:[NSString stringWithFormat:@"QQ登录%@",  success ? @"成功" : @"失败"]];
     }];
 }
 
 //验证QQ token(已登录情况下)
 - (IBAction)onClickQQToken:(id)sender {
     [[TVSAccountSDK shared]qqTokenVerifyWithHandler:^(BOOL success){
+        [self showText:[NSString stringWithFormat:@"QQ token 验证%@",  success ? @"成功" : @"失败"]];
+        if (success) {
+            [self readAccountUserInfo];
+        }
         [self refreshBtnStatus];
-        [self textViewAppendText:[NSString stringWithFormat:@"QQ token验证%@",  success ? @"成功" : @"失败"]];
     }];
+}
+
+//读取账号、用户信息
+-(void)readAccountUserInfo {
+    TVSAccountInfo* ai = [TVSAccountSDK shared].accountInfo;
+    TVSUserInfo* ui = [TVSAccountSDK shared].userInfo;
+    NSString* clientId = [TVSAccountInfo clientIdWithDSN:@"mDSN" productId:@"mProductId"];
+    [self showText:[NSString stringWithFormat:@"nickname: %@",  ui.nickName]];
+    [self showText:[NSString stringWithFormat:@"token: %@",  ai.accessToken]];
+    [self showText:[NSString stringWithFormat:@"ClientId: %@",  clientId]];
 }
 
 //注销登录
 - (IBAction)onClickBtnLogout:(id)sender {
     [[TVSAccountSDK shared]logout];
     [self refreshBtnStatus];
+    _tvResult.text = nil;
 }
 
 //进入个人中心页面
@@ -142,11 +165,15 @@
     }
 }
 
--(void)textViewAppendText:(NSString*)text {
+-(void)showText:(NSString*)text {
     if (_tvResult.text == nil || _tvResult.text.length == 0) {
         _tvResult.text = text;
     } else {
         _tvResult.text = [_tvResult.text stringByAppendingString:[NSString stringWithFormat:@"%@%@", @"\n\n", text]];
+    }
+    if (_tvResult.text.length > 0) {
+        NSRange bottom = NSMakeRange(_tvResult.text.length - 1, 1);
+        [_tvResult scrollRangeToVisible:bottom];
     }
 }
 
