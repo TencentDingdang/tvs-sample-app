@@ -11,13 +11,13 @@
 #import "TVSAccount.h"
 
 /*!
- * @brief TVS 个人中心 会员类型
+ * @brief TVS 会员类型
  */
 typedef NS_ENUM(NSInteger,TVSMemberType) {
     /*!
      * @brief QQ 音乐会员
      */
-    TVSUserCenterMemberTypeQQMusic
+    TVSMemberTypeQQMusic
 };
 
 
@@ -29,11 +29,11 @@ typedef NS_ENUM(NSInteger,TVSMemberType) {
 @interface TVSMember: NSObject
 
 /*!
- * @brief 获取 TVSUserCenter 实例
+ * @brief 获取 TVSMember 实例
  * @param deviceId 设备 ID
  * @param deviceType 设备类型
  * @param deviceOEM 设备厂商
- * @return TVSUserCenter 实例
+ * @return TVSMember 实例
  */
 -(instancetype)initWithDeviceId:(NSString*)deviceId deviceType:(NSString*)deviceType deviceOEM:(NSString*)deviceOEM;
 
