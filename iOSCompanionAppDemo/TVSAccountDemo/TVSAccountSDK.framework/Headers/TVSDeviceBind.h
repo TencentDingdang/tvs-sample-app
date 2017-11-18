@@ -10,19 +10,24 @@
 
 
 /*!
- * @brief 设备绑定结果：成功
+ * @brief TVS 设备绑定结果
  */
-extern int const TVSBindDeviceResultSuccess;
-
-/*!
- * @brief 设备绑定结果：已被绑定
- */
-extern int const TVSBindDeviceResultHasBinded;
-
-/*!
- * @brief 设备绑定结果：参数格式错误
- */
-extern int const TVSBindDeviceResultParamsInvalid;
+typedef NS_ENUM(NSInteger,TVSBindDeviceResult) {
+    /*!
+     * @brief 设备绑定结果：成功
+     */
+    TVSBindDeviceResultSuccess,
+    
+    /*!
+     * @brief 设备绑定结果：已被绑定
+     */
+    TVSBindDeviceResultHasBinded,
+    
+    /*!
+     * @brief 设备绑定结果：参数格式错误
+     */
+    TVSBindDeviceResultParamsInvalid
+};
 
 
 
@@ -145,8 +150,8 @@ extern int const TVSBindDeviceResultParamsInvalid;
  * @param deviceIp 扫描到的局域网设备IP地址
  * @param bundleId App bundleId
  * @param guid app guid
- * @param handler 回调，int 取值为 TVSBindDeviceResultSuccess/TVSBindDeviceResultHasBinded/TVSBindDeviceResultParamsInvalid
+ * @param handler 回调，参数为 TVSBindDeviceResult 枚举
  */
--(void)sendAccountInfoToDeviceIp:(NSString*)deviceIp bundleId:(NSString*)bundleId guid:(NSString*)guid handler:(void(^)(int))handler;
+-(void)sendAccountInfoToDeviceIp:(NSString*)deviceIp bundleId:(NSString*)bundleId guid:(NSString*)guid handler:(void(^)(TVSBindDeviceResult))handler;
 
 @end
