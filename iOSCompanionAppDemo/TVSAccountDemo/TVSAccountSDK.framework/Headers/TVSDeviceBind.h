@@ -10,7 +10,7 @@
 
 
 /*!
- * @brief TVS 设备绑定结果
+ * @brief 设备绑定结果
  */
 typedef NS_ENUM(NSInteger,TVSBindDeviceResult) {
     /*!
