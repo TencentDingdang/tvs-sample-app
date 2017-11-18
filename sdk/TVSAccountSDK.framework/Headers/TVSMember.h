@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "TVSAccount.h"
 
 /*!
  * @brief TVS 会员类型
