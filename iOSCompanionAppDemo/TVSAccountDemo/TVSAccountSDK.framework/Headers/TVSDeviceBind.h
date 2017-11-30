@@ -32,10 +32,10 @@ typedef NS_ENUM(NSInteger,TVSBindDeviceResult) {
 
 
 /*!
- * @class TVSDevice
- * @brief 集成了叮当语音服务的设备
+ * @class TVSWLANDevice
+ * @brief 扫描到的无线局域网叮当设备
  */
-@interface TVSDevice : NSObject
+@interface TVSWLANDevice : NSObject
 
 /*!
  * @brief 设备(无线局域网)IP 地址，用于后续设备绑定
@@ -100,6 +100,102 @@ typedef NS_ENUM(NSInteger,TVSBindDeviceResult) {
 @end
 
 
+
+/*!
+ * @class TVSPushDevice
+ * @brief TVS Push 设备
+ */
+@interface TVSPushDevice : NSObject
+
+/*!
+ * @brief pushId
+ */
+@property(nonatomic,copy) NSString* pushId;
+
+/*!
+ * @brief pushIdExtra
+ */
+@property(nonatomic,copy) NSString* pushIdExtra;
+
+/*!
+ * @brief guid
+ */
+@property(nonatomic,copy) NSString* guid;
+
+/*!
+ * @brief deviceId 设备ID
+ */
+@property(nonatomic,copy) NSString* deviceId;
+
+/*!
+ * @brief deviceName 设备名
+ */
+@property(nonatomic,copy) NSString* deviceName;
+
+/*!
+ * @brief deviceType 设备类型
+ */
+@property(nonatomic,copy) NSString* deviceType;
+
+/*!
+ * @brief deviceSerial 设备系列
+ */
+@property(nonatomic,copy) NSString* deviceSerial;
+
+/*!
+ * @brief deviceOEM 设备厂商
+ */
+@property(nonatomic,copy) NSString* deviceOEM;
+
+/*!
+ * @brief deviceOEMUrl 设备品牌图标
+ */
+@property(nonatomic,copy) NSString* deviceOEMUrl;
+
+/*!
+ * @brief deviceMark 设备备注
+ */
+@property(nonatomic,copy) NSString* deviceMark;
+
+/*!
+ * @brief QUA
+ */
+@property(nonatomic,copy) NSString* QUA;
+
+/*!
+ * @brief IMEI
+ */
+@property(nonatomic,copy) NSString* IMEI;
+
+/*!
+ * @brief LC
+ */
+@property(nonatomic,copy) NSString* LC;
+
+/*!
+ * @brief MAC
+ */
+@property(nonatomic,copy) NSString* MAC;
+
+/*!
+ * @brief QIMEI
+ */
+@property(nonatomic,copy) NSString* QIMEI;
+
+/*!
+ * @brief enrollTime 注册时间
+ */
+@property(nonatomic,assign) long long enrollTime;
+
+/*!
+ * @brief bindTime 绑定时间
+ */
+@property(nonatomic,assign) long long bindTime;
+
+@end
+
+
+
 /*!
  * @class TVSDeviceBind
  * @brief TVS 设备发现/绑定接口
@@ -115,24 +211,37 @@ typedef NS_ENUM(NSInteger,TVSBindDeviceResult) {
 /*!
  * @brief 绑定 Push 相关信息
  * @warning 必须确保已登录
+ * @param guid (APP或设备的)guid
+ * @param pushId (APP或设备的)pushId
+ * @param pushIdExtra (APP或设备的)pushIdExtra
+ * @param pushDevice push 设备信息
+ * @param handler 回调，BOOL 值表示是否成功
+ */
+-(void)bindPushInfoWithGuid:(NSString*)guid pushId:(NSString*)pushId pushIdExtra:(NSString*)pushIdExtra pushDevice:(TVSPushDevice*)pushDevice handler:(void(^)(BOOL))handler;
+
+/*!
+ * @brief 解除绑定 Push 相关信息
+ * @warning 必须确保已登录
  * @param guid
  * @param pushId
  * @param pushIdExtra
- * @param qua 设备QUA(APP可传nil)
- * @param imei 设备 IMEI(APP可传nil)
- * @param lc 设备License(APP可传nil)
- * @param mac 设备 MAC 地址(APP可传nil)
- * @param qimei 设备QIMEI(APP可传nil)
- * @param isApp 是否App
+ * @param pushDevice push设备
  * @param handler 回调，BOOL 值表示是否成功
  */
--(void)bindPushInfoWithGuid:(NSString*)guid pushId:(NSString*)pushId pushIdExtra:(NSString*)pushIdExtra qua:(NSString*)qua imei:(NSString*)imei lc:(NSString*)lc mac:(NSString*)mac qimei:(NSString*)qimei isApp:(BOOL)isApp handler:(void(^)(BOOL))handler;
+-(void)unbindPushInfoWithGuid:(NSString*)guid pushId:(NSString*)pushId pushIdExtra:(NSString*)pushIdExtra pushDevice:(TVSPushDevice*)pushDevice handler:(void(^)(BOOL))handler;
+
+/*!
+ * @brief 查询绑定过的 push 设备列表
+ * @warning 必须确保已登录
+ * @param handler 回调
+ */
+-(void)queryPushDevicesWithHandler:(void(^)(NSArray<TVSPushDevice*>*))handler;
 
 /*!
  * @brief 扫描当前无线局域网内(集成了叮当语音服务)的设备(音箱、电视、耳机等)
  * @param handler 回调
  */
--(void)discoverWlanDevicesWithHandler:(void(^)(TVSDevice*))handler;
+-(void)discoverWlanDevicesWithHandler:(void(^)(TVSWLANDevice*))handler;
 
 /*!
  * @brief 将 WiFi 信息同步给待配网的叮当设备
@@ -142,7 +251,7 @@ typedef NS_ENUM(NSInteger,TVSBindDeviceResult) {
  * @param ip 设备热点 WiFi 网关地址
  * @param handler 回调
  */
--(void)sendWifiSsid:(NSString*)ssid password:(NSString*)password ip:(NSString*)ip handler:(void(^)(TVSDevice*))handler;
+-(void)sendWifiSsid:(NSString*)ssid password:(NSString*)password ip:(NSString*)ip handler:(void(^)(TVSWLANDevice*))handler;
 
 /*!
  * @brief (APP绑定设备成功后)将账号信息同步给设备
