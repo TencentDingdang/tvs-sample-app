@@ -110,8 +110,9 @@
 
 //进入会员H5页面
 - (IBAction)onClickBtnUserCenter:(id)sender {
-    TVSMember* uc = [[TVSMember alloc]initWithDeviceId:@"mDeviceId" deviceType:@"mDeviceType" deviceOEM:@"mDeviceOEM"];
-    [uc enterPageFromViewController:self];
+    TVSMember* uc = [TVSMember new];
+    [uc setDeviceId:@"mDeviceId" deviceType:@"mDeviceType" deviceOEM:@"mDeviceOEM"];
+    [uc enterPage:TVSPageTypeMember fromViewController:self title:@"个人中心"];
 
 //    if ([TVSAccount shared].isWXTokenExist || [TVSAccount shared].isQQTokenExist) {//必须先登录
 //        NSString* phone= @"13987654321";
