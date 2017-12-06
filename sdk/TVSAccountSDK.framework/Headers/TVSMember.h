@@ -22,27 +22,64 @@ typedef NS_ENUM(NSInteger,TVSMemberType) {
 
 
 /*!
+ * @brief TVS 相关 H5 页面
+ */
+typedef NS_ENUM(NSInteger,TVSPageType) {
+    /*!
+     * @brief 领取会员页面
+     */
+    TVSPageTypeMember,
+    /*!
+     * @brief 手机号地址页面
+     */
+    TVSPageTypePhoneAddress,
+    /*!
+     * @brief 用户反馈页面
+     */
+    TVSPageTypeFeedback
+};
+
+
+
+/*!
  * @class TVSMember
  * @brief TVS 会员相关接口
  */
 @interface TVSMember: NSObject
 
 /*!
- * @brief 获取 TVSMember 实例
- * @param deviceId 设备 ID
- * @param deviceType 设备类型
- * @param deviceOEM 设备厂商
- * @return TVSMember 实例
+ * @brief 设备ID(用于领取会员)
  */
--(instancetype)initWithDeviceId:(NSString*)deviceId deviceType:(NSString*)deviceType deviceOEM:(NSString*)deviceOEM;
+@property(nonatomic,copy) NSString* deviceId;
 
 /*!
- * @brief 打开会员页面
- * @warning 暂时只支持微信支付
- * @param viewController 起始ViewController
- * @return 如果失败，请检查 deviceId/deviceType/DeviceOEM 和 viewController 是否为空
+ * @brief 设备类型(用于领取会员)
  */
--(BOOL)enterPageFromViewController:(UIViewController*)viewController;
+@property(nonatomic,copy) NSString* deviceType;
+
+/*!
+ * @brief 设备厂商(用于领取会员)
+ */
+@property(nonatomic,copy) NSString* deviceOEM;
+
+
+/*!
+ * @brief 设置设备相关信息（用于领取会员）
+ * @param deviceId 设备id
+ * @param deviceType 设备类型
+ * @param deviceOEM 设备厂商
+ */
+-(void)setDeviceId:(NSString*)deviceId deviceType:(NSString*)deviceType deviceOEM:(NSString*)deviceOEM;
+
+/*!
+ * @brief 打开会员相关 H5 页面
+ * @warning 暂时只支持微信支付
+ * @param pageType H5 页面类型
+ * @param fromViewController 起始页面
+ * @param title 标题，如果传空会自动读取网页标题
+ * @return 是否成功
+ */
+-(BOOL)enterPage:(TVSPageType)pageType fromViewController:(UIViewController*)fromViewController title:(NSString*)title;
 
 /*!
  * @brief 查询会员状态
