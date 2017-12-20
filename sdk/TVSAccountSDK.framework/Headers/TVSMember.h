@@ -42,26 +42,38 @@ typedef NS_ENUM(NSInteger,TVSPageType) {
 
 
 /*!
+ * @protocol TVSPageDelegate
+ * @brief TVS ViewControler 回调
+ */
+@protocol TVSPageDelegate<NSObject>
+
+@optional
+-(void)TVSDidLoadPage:(TVSPageType)pageType;
+
+@optional
+-(void)TVSWillAppearPage:(TVSPageType)pageType;
+
+@optional
+-(void)TVSDidAppearPage:(TVSPageType)pageType;
+
+@optional
+-(void)TVSWillDisappearPage:(TVSPageType)pageType;
+
+@optional
+-(void)TVSDidDisappearPage:(TVSPageType)pageType;
+
+@optional
+-(void)TVSPage:(TVSPageType)pageType receivedRemoteControlEvent:(UIEvent*)event;
+
+@end
+
+
+
+/*!
  * @class TVSMember
  * @brief TVS 会员相关接口
  */
 @interface TVSMember: NSObject
-
-/*!
- * @brief 设备ID(用于领取会员)
- */
-@property(nonatomic,copy) NSString* deviceId;
-
-/*!
- * @brief 设备类型(用于领取会员)
- */
-@property(nonatomic,copy) NSString* deviceType;
-
-/*!
- * @brief 设备厂商(用于领取会员)
- */
-@property(nonatomic,copy) NSString* deviceOEM;
-
 
 /*!
  * @brief 设置设备相关信息（用于领取会员）
@@ -77,9 +89,10 @@ typedef NS_ENUM(NSInteger,TVSPageType) {
  * @param pageType H5 页面类型
  * @param fromViewController 起始页面
  * @param title 标题，如果传空会自动读取网页标题
+ * @param delegate 页面回调
  * @return 是否成功
  */
--(BOOL)enterPage:(TVSPageType)pageType fromViewController:(UIViewController*)fromViewController title:(NSString*)title;
+-(BOOL)enterPage:(TVSPageType)pageType fromViewController:(UIViewController*)fromViewController title:(NSString*)title delegate:(id<TVSPageDelegate>)delegate;
 
 /*!
  * @brief 查询会员状态
