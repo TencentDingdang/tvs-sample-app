@@ -48,21 +48,93 @@ typedef NS_ENUM(NSInteger,TVSPageType) {
 @protocol TVSPageDelegate<NSObject>
 
 @optional
+/*!
+ * @brief H5页面已加载
+ * @param pageType 页面类型
+ */
 -(void)TVSDidLoadPage:(TVSPageType)pageType;
 
 @optional
+/*!
+ * @brief H5页面即将出现
+ * @param pageType 页面类型
+ */
 -(void)TVSWillAppearPage:(TVSPageType)pageType;
 
 @optional
+/*!
+ * @brief H5页面已经出现
+ * @param pageType 页面类型
+ */
 -(void)TVSDidAppearPage:(TVSPageType)pageType;
 
 @optional
+/*!
+ * @brief H5页面即将消失
+ * @param pageType 页面类型
+ */
 -(void)TVSWillDisappearPage:(TVSPageType)pageType;
 
 @optional
+/*!
+ * @brief H5页面已经消失
+ * @param pageType 页面类型
+ */
 -(void)TVSDidDisappearPage:(TVSPageType)pageType;
 
 @optional
+/*!
+ * @brief H5页面QQ登录
+ * @param pageType 页面类型
+ * @param result QQ登录结果
+ */
+-(void)TVSPage:(TVSPageType)pageType qqLoginResult:(BOOL)result;
+
+@optional
+/*!
+ * @brief H5页面微信登录
+ * @param pageType 页面类型
+ * @param result 微信登录结果
+ */
+-(void)TVSPage:(TVSPageType)pageType wxLoginResult:(BOOL)result;
+
+@optional
+/*!
+ * @brief H5页面QQ验票
+ * @param pageType 页面类型
+ * @param result QQ验票结果
+ */
+-(void)TVSPage:(TVSPageType)pageType verifyQQTokenResult:(BOOL)result;
+
+@optional
+/*!
+ * @brief H5页面微信刷票
+ * @param pageType 页面类型
+ * @param result 微信刷票结果
+ */
+-(void)TVSPage:(TVSPageType)pageType refreshWXTokenResult:(BOOL)result;
+
+@optional
+/*!
+ * @brief H5页面微信支付
+ * @param pageType 页面类型
+ * @param result 微信支付结果
+ */
+-(void)TVSPage:(TVSPageType)pageType wxPayResult:(BOOL)result;
+
+@optional
+/*!
+ * @brief H5页面关闭叮当智能语音服务
+ * @param pageType 页面类型
+ */
+-(void)TVSUnbindAtPage:(TVSPageType)pageType;
+
+@optional
+/*!
+ * @brief H5页面收到远程控制事件
+ * @param pageType 页面类型
+ * @param event 远程控制事件
+ */
 -(void)TVSPage:(TVSPageType)pageType receivedRemoteControlEvent:(UIEvent*)event;
 
 @end
