@@ -152,8 +152,9 @@ typedef NS_ENUM(NSInteger,TVSPageType) {
  * @param deviceId 设备id
  * @param deviceType 设备类型
  * @param deviceOEM 设备厂商
+ * @param productId
  */
--(void)setDeviceId:(NSString*)deviceId deviceType:(NSString*)deviceType deviceOEM:(NSString*)deviceOEM;
+-(void)setDeviceId:(NSString*)deviceId deviceType:(NSString*)deviceType deviceOEM:(NSString*)deviceOEM productId:(NSString*)productId;
 
 /*!
  * @brief 打开会员相关 H5 页面
