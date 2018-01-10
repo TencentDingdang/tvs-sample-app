@@ -149,12 +149,12 @@ typedef NS_ENUM(NSInteger,TVSPageType) {
 
 /*!
  * @brief 设置设备相关信息（用于领取会员）
- * @param deviceId 设备id
  * @param deviceType 设备类型
  * @param deviceOEM 设备厂商
- * @param productId
+ * @param productId TVS 后台申请的产品 id
+ * @param dsn 设备号
  */
--(void)setDeviceId:(NSString*)deviceId deviceType:(NSString*)deviceType deviceOEM:(NSString*)deviceOEM productId:(NSString*)productId;
+-(void)setDeviceType:(NSString*)deviceType deviceOEM:(NSString*)deviceOEM productId:(NSString*)productId DSN:(NSString*)dsn;
 
 /*!
  * @brief 打开会员相关 H5 页面
