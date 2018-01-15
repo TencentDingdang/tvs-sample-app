@@ -123,6 +123,16 @@ typedef NS_ENUM(NSInteger,TVSBindDeviceResult) {
 @property(nonatomic,copy) NSString* guid;
 
 /*!
+ * @brief productId
+ */
+@property(nonatomic,copy) NSString* productId;
+
+/*!
+ * @brief DSN
+ */
+@property(nonatomic,copy) NSString* DSN;
+
+/*!
  * @brief deviceId 设备ID
  */
 @property(nonatomic,copy) NSString* deviceId;
