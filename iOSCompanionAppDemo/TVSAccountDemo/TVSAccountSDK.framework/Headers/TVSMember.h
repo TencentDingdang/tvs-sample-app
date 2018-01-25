@@ -19,6 +19,20 @@ typedef NS_ENUM(NSInteger,TVSMemberType) {
     TVSMemberTypeQQMusic
 };
 
+/*!
+ * @brief TVS 会员时长单位
+ */
+typedef NS_ENUM(NSInteger,TVSMemberUnit) {
+    /*!
+     * @brief 年
+     */
+    TVSMemberUnitYear,
+    /*!
+     * @brief 年
+     */
+    TVSMemberUnitMonth
+};
+
 
 
 /*!
@@ -26,9 +40,13 @@ typedef NS_ENUM(NSInteger,TVSMemberType) {
  */
 typedef NS_ENUM(NSInteger,TVSPageType) {
     /*!
-     * @brief 领取会员页面
+     * @brief 个人中心页面
      */
     TVSPageTypeMember,
+    /*!
+     * @brief 会员领取/充值页面
+     */
+    TVSPageTypeRecharge,
     /*!
      * @brief 手机号地址页面
      */
@@ -168,11 +186,19 @@ typedef NS_ENUM(NSInteger,TVSPageType) {
 -(BOOL)enterPage:(TVSPageType)pageType fromViewController:(UIViewController*)fromViewController title:(NSString*)title delegate:(id<TVSPageDelegate>)delegate;
 
 /*!
+ * @brief 查询设备是否领取过会员
+ * @warning 必须确保已登录
+ * @param type 会员类型
+ * @param handler 回调，BOOL 值表示是否可以领取会员，NSInteger 和 TVSMemberUnit 分别表示可以领取的会员时长数量和单位
+ */
+-(void)queryDeviceStatusWithType:(TVSMemberType)type handler:(void(^)(BOOL,NSInteger,TVSMemberUnit))handler;
+
+/*!
  * @brief 查询会员状态
  * @warning 必须确保已登录
  * @param type 会员类型
- * @param handler 回调，两个 BOOL 值分别表示是否参与过活动、是否会员，两个 NSDate 分别表示会员开始时间、会员过期时间
+ * @param handler 回调，BOOL 值表示是否是否会员，两个 NSDate 分别表示会员开始时间、会员过期时间
  */
--(void)queryStatusWithType:(TVSMemberType)type handler:(void(^)(BOOL,BOOL,NSDate*,NSDate*))handler;
+-(void)queryMemberStatusWithType:(TVSMemberType)type handler:(void(^)(BOOL,NSDate*,NSDate*))handler;
 
 @end
