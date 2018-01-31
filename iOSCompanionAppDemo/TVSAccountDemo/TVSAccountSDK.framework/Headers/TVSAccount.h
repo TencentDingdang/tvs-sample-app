@@ -250,6 +250,12 @@ extern NSString* const TVSInvalidRefreshToken;
 -(void)wxPayWithAppId:(NSString*)appId partnerid:(NSString*)partnerid prepayid:(NSString*)prepayid package:(NSString*)package noncestr:(NSString*)noncestr sign:(NSString*)sign timestamp:(UInt32)timestamp;
 
 /*!
+ * @brief 检测微信是否安装，版本是否支持
+ * @return
+ */
+-(BOOL)checkWXApp;
+
+/*!
  * @brief QQ 登录
  * @warning 如果 QQ token 不存在，则必须调用此方法，以获得 TVS 后台返回的相关账户信息
  * @param handler 回调，BOOL 值表示是否成功

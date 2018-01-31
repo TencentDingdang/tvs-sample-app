@@ -28,7 +28,7 @@ typedef NS_ENUM(NSInteger,TVSMemberUnit) {
      */
     TVSMemberUnitYear,
     /*!
-     * @brief 年
+     * @brief 月
      */
     TVSMemberUnitMonth
 };
