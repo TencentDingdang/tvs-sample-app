@@ -44,12 +44,16 @@
             android:text="Logout"
             />
         <Button
-            android:id="@+id/tousercenterbtn"
+            android:id="@+id/reportendstatebtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAllCaps="false"
-            android:text="ToUserCenter"
+            android:text="ReportEndState"
             />
+        <TextView
+            android:id="@+id/reportrelationtextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/qqopenlayout"
@@ -88,7 +92,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@id/qqopenlayout">
+        android:layout_below="@id/qqopenlayout"
+        android:visibility="gone">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -107,12 +112,57 @@
             android:textAllCaps="false"
             android:text="Logout"
             />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/alarmoplayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/qqlayout"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AlarmOp"/>
+        <Button
+            android:id="@+id/alarmcreate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:textAllCaps="false"
+            android:text="Create"
+            />
+        <Button
+            android:id="@+id/alarmdel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:textAllCaps="false"
+            android:text="Del"
+            />
+        <Button
+            android:id="@+id/alarmupdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:textAllCaps="false"
+            android:text="Update"
+            />
+        <Button
+            android:id="@+id/alarmquery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:textAllCaps="false"
+            android:text="Query"
+            />
         <Button
             android:id="@+id/getclientidbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="0dp"
             android:textAllCaps="false"
-            android:text="Get ClientId"
+            android:text="ClientId"
             />
     </LinearLayout>
     <LinearLayout
@@ -120,7 +170,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@id/qqlayout">
+        android:layout_below="@id/alarmoplayout">
         <EditText
             android:id="@+id/getcaptchaedittext"
             android:layout_width="wrap_content"

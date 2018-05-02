@@ -4,12 +4,11 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.tencent.ai.dobby"
+        applicationId "com.tencent.ai.dobbydemo"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -23,33 +22,16 @@ android {
             dirs 'libs'
         }
     }
-
-    signingConfigs {
-        debug {
-            storeFile file('../DobbyAndroid.keystore')
-            keyAlias 'dobby'
-            keyPassword 'dobby0915'
-            storePassword 'dobby0915'
-        }
-        release {
-            storeFile file('../DobbyAndroid.keystore')
-            keyAlias 'dobby'
-            keyPassword 'dobby0915'
-            storePassword 'dobby0915'
-        }
-    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile(name:'tvsloginlib-dingdang-release', ext:'aar')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    compile(name:'tvsloginlib-dingdangdemo-release', ext:'aar')
+    compile(name:'tvsdevicelib-release', ext:'aar')
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:1.0.2'
     compile 'com.android.support:design:25.2.0'
-    compile 'org.jbundle.util.osgi.wrapped:org.jbundle.util.osgi.wrapped.org.apache.http.client:4.1.2'
-    testCompile 'junit:junit:4.12'
+    compile 'com.squareup.okhttp3:okhttp:3.8.1'
+    compile 'com.google.code.gson:gson:2.8.1'
 }

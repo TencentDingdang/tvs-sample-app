@@ -1,4 +1,4 @@
-package com.tencent.ai.dobby;
+package com.tencent.ai.dobbydemo;
 
 import android.app.Application;
 
@@ -14,6 +14,5 @@ public class CustomApplication extends Application {
         super.onCreate();
         manager = LoginWupManager.getInstance(getApplicationContext());
         manager.startup();
-        manager.setLoginEnv(ELoginEnv.TEST);
     }
 }

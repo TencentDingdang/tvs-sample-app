@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tencent.ai.dobby"
+    package="com.tencent.ai.dobbydemo"
     android:versionCode="171204"
     android:versionName="171204_Beta">
 
     <application
-        android:name="com.tencent.ai.tvs.LoginApplication"
+        android:name="com.tencent.ai.tvsdevice.DeviceApplication"
         android:allowBackup="true"
         android:exported="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,9 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-<!-- Use CustomApplication Context Start -->
-        <!-- android:name="com.tencent.ai.dobby.CustomApplication -->
-<!-- Use CustomApplication Context End -->
+        <!-- Use CustomApplication Context Start -->
+        <!-- android:name="com.tencent.ai.dobbydemo.CustomApplication -->
+        <!-- Use CustomApplication Context End -->
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTask">
@@ -24,6 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".SmartLinkActivity" />
+        <activity android:name=".SoftAPActivity" />
     </application>
 
 </manifest>

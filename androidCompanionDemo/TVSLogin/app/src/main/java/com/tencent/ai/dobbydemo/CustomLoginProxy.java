@@ -1,4 +1,4 @@
-package com.tencent.ai.dobby;
+package com.tencent.ai.dobbydemo;
 
 import android.content.Context;
 

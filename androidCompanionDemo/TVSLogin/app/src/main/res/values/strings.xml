@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">TVSLogin</string>
+    <string name="title_activity_soft_ap">SoftAPActivity</string>
 </resources>

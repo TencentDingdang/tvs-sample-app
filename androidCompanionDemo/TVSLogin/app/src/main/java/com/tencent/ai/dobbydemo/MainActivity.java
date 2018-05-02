@@ -1,8 +1,8 @@
-package com.tencent.ai.dobby;
+package com.tencent.ai.dobbydemo;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +17,13 @@ import com.tencent.ai.tvs.AuthorizeListener;
 import com.tencent.ai.tvs.BindingListener;
 import com.tencent.ai.tvs.ConstantValues;
 import com.tencent.ai.tvs.LoginProxy;
+import com.tencent.ai.tvs.business.AlarmBusiness;
+import com.tencent.ai.tvs.business.AlarmBusinessDeviceInfo;
+import com.tencent.ai.tvs.business.AlarmBusinessInfo;
+import com.tencent.ai.tvs.business.EAlarmOpResultType;
+import com.tencent.ai.tvs.business.EAlarmOper;
+import com.tencent.ai.tvs.business.EAlarmRepeatType;
+import com.tencent.ai.tvs.comm.CommOpInfo;
 import com.tencent.ai.tvs.env.ELocationType;
 import com.tencent.ai.tvs.env.ELoginEnv;
 import com.tencent.ai.tvs.env.ELoginPlatform;
@@ -32,24 +39,40 @@ import com.tencent.ai.tvs.info.QQInfoManager;
 import com.tencent.ai.tvs.info.QQOpenInfoManager;
 import com.tencent.ai.tvs.info.UserInfoManager;
 import com.tencent.ai.tvs.info.WxInfoManager;
+import com.tencent.ai.tvs.qrcode.QRStateListener;
 import com.tencent.ai.tvs.ui.UserCenterStateListener;
 import com.tencent.connect.common.Constants;
+
+import java.util.ArrayList;
 
 import SmartService.EAIPushIdType;
 import oicq.wlogin_sdk.request.WtloginHelper;
 
 public class MainActivity extends AppCompatActivity implements AuthorizeListener, BindingListener {
 
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
-    private static final String TEST_APPID_WX = "wxd077c3460b51e427";
-    private static final String TEST_APPID_QQOPEN = "1105886239";
+    private static final String TEST_APPID_WX = "wxdbd76c1af795f58e";
+    private static final String TEST_APPID_QQOPEN = "101470979";
     private static final long TEST_APPID_QQ = 1600001268L;
 
+    private static final long TIME_MILLIS_DELTA = 1000 * 60 * 60;
+
+
+    private static final String TEST_APPKEY = "7e8ab486-c6f6-4ecc-b52e-7ea8da82c9da";
+    private static final String TEST_APPACCEETOKEN = "9cb1fbf4c54442cc80c9aed8cb3c25b6";
+    private static final String TEST_GUID = "9cb1fbf4c54442cc80c9aed8cb3c25b6";
     private static final String TEST_PRODUCTID = "7e8ab486-c6f6-4ecc-b52e-7ea8da82c9da:9cb1fbf4c54442cc80c9aed8cb3c25b6";
     private static final String TEST_DSN = "FF31F085A55DD019C8575CFB";
 
     private static final String TEST_DEVOEM = "GGMM";
     private static final String TEST_DEVTYPE = "SPEAKER";
+
+    private static final String TEST_WX_AUTH_RET = "{\"access_token\":\"8_SIkvkPRb_YzKpfLNal5aANjPkZri_eZiOUh7pYuN2dF8liBhVyL9lawYb3Em-S6R1bzw_uPi6W8PMSFHK-DVP5SMR5GE6HsCRHdzuJcTz6s\",\"expires_in\":7200,\"refresh_token\":\"8_umoSNLEEY_u-a48x39m-Ti41sVNe4actHJHYBu07i4e9yv3bS9Fakq0xOlLnhwOSCng3ZnjuRu7v5cXa68Wv9AtiHF-_zOBXjF32dmIVJqI\",\"openid\":\"olW1HwuZs4zRIiTs8xN_5i65DU4Q\",\"scope\":\"snsapi_userinfo\",\"unionid\":\"o9GiTuAkK5sryCobPgdS_iDo1W8A\"}";
+    private static final String TEST_WX_REFRESH_RET = "{\"openid\":\"olW1HwuZs4zRIiTs8xN_5i65DU4Q\",\"access_token\":\"8_SIkvkPRb_YzKpfLNal5aANjPkZri_eZiOUh7pYuN2dF8liBhVyL9lawYb3Em-S6R1bzw_uPi6W8PMSFHK-DVP5SMR5GE6HsCRHdzuJcTz6s\",\"expires_in\":7200,\"refresh_token\":\"8_umoSNLEEY_u-a48x39m-Ti41sVNe4actHJHYBu07i4e9yv3bS9Fakq0xOlLnhwOSCng3ZnjuRu7v5cXa68Wv9AtiHF-_zOBXjF32dmIVJqI\",\"scope\":\"snsapi_base,snsapi_userinfo,\"}";
+    private static final String TEST_QQOPEN_AUTH_RET = "{\"ret\":0,\"openid\":\"24361BBA12837FFA742C79EC810A6DA8\",\"access_token\":\"B8EC8C0ADD6DEF7F2E380C8DC8CD6451\",\"pay_token\":\"399D4E199447C1D2B51376E6692CC55C\",\"expires_in\":7776000,\"pf\":\"desktop_m_qq-10000144-android-2002-\",\"pfkey\":\"7195cbb183f325e51c93a09d441f9243\",\"msg\":\"\",\"login_cost\":98,\"query_authority_cost\":352,\"authority_cost\":0,\"expires_time\":1530603609881}";
+    private static final String TEST_WX_USER_RET = " {\"openid\":\"olW1HwuZs4zRIiTs8xN_5i65DU4Q\",\"nickname\":\"时间段hddjd大喊大叫觉得\",\"sex\":0,\"language\":\"zh_CN\",\"city\":\"\",\"province\":\"\",\"country\":\"\",\"headimgurl\":\"http:\\/\\/thirdwx.qlogo.cn\\/mmopen\\/vi_32\\/eM2qvBP8HYxrXdCTlAib2ibmeJw4LYZfJOYsbDShNocXuIUWEnQ1Nwh5Nk5lBjb3LJhOt1r2dt5lHtIAdcUGx7RA\\/132\",\"privilege\":[],\"unionid\":\"o9GiTuAkK5sryCobPgdS_iDo1W8A\"}";
+    private static final String TEST_QQOPEN_USER_RET = "{\"ret\":0,\"msg\":\"\",\"is_lost\":0,\"nickname\":\"\",\"gender\":\"男\",\"province\":\"\",\"city\":\"\",\"year\":\"0\",\"figureurl\":\"http:\\/\\/qzapp.qlogo.cn\\/qzapp\\/1105886239\\/24361BBA12837FFA742C79EC810A6DA8\\/30\",\"figureurl_1\":\"http:\\/\\/qzapp.qlogo.cn\\/qzapp\\/1105886239\\/24361BBA12837FFA742C79EC810A6DA8\\/50\",\"figureurl_2\":\"http:\\/\\/qzapp.qlogo.cn\\/qzapp\\/1105886239\\/24361BBA12837FFA742C79EC810A6DA8\\/100\",\"figureurl_qq_1\":\"http:\\/\\/thirdqq.qlogo.cn\\/qqapp\\/1105886239\\/24361BBA12837FFA742C79EC810A6DA8\\/40\",\"figureurl_qq_2\":\"http:\\/\\/thirdqq.qlogo.cn\\/qqapp\\/1105886239\\/24361BBA12837FFA742C79EC810A6DA8\\/100\",\"is_yellow_vip\":\"0\",\"vip\":\"0\",\"yellow_vip_level\":\"0\",\"level\":\"0\",\"is_yellow_year_vip\":\"0\"}";
 
     private LoginProxy proxy;
 
@@ -66,7 +89,11 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
     private Button wxLoginBtn, wxLogoutBtn;
     private Button qqOpenLoginBtn, qqOpenLogoutBtn;
     private Button qqLoginBtn, qqLogoutBtn;
-    private Button toUserCenterBtn, toUserCenterWithCallbackBtn, toGetClientIdBtn;
+    private Button reportEndStateBtn, toUserCenterWithCallbackBtn, toGetClientIdBtn;
+    private Button alarmCreate, alarmDel, alarmUpdate, alarmQuery;
+    private long addedAlarmId;
+
+    private TextView reportRelationTextView;
 
     private EditText getCaptchaEditText;
     private Button getCaptchaButton;
@@ -109,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
 
     private static ELoginPlatform TEST_PLATFORM = ELoginPlatform.WX;
 
+    private boolean isSimpleInterface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -149,7 +178,12 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
                     return;
                 }
                 TEST_PLATFORM = ELoginPlatform.WX;
-                proxy.requestLogin(ELoginPlatform.WX, TEST_PRODUCTID, TEST_DSN, MainActivity.this);
+                if (isSimpleInterface) {
+                    proxy.tvsAuth(TEST_PLATFORM, TEST_WX_AUTH_RET);
+                }
+                else {
+                    proxy.requestLogin(ELoginPlatform.WX, TEST_PRODUCTID, TEST_DSN, MainActivity.this);
+                }
             }
         });
 
@@ -157,7 +191,12 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
             @Override
             public void onClick(View v) {
                 TEST_PLATFORM = ELoginPlatform.QQOpen;
-                proxy.requestLogin(ELoginPlatform.QQOpen, TEST_PRODUCTID, TEST_DSN, MainActivity.this);
+                if (isSimpleInterface) {
+                    proxy.tvsAuth(TEST_PLATFORM, TEST_QQOPEN_AUTH_RET);
+                }
+                else {
+                    proxy.requestLogin(ELoginPlatform.QQOpen, TEST_PRODUCTID, TEST_DSN, MainActivity.this);
+                }
             }
         });
 
@@ -192,11 +231,83 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
         toGetClientIdBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("ClientId", proxy.getClientId(TEST_PLATFORM));
+                Log.v(LOG_TAG, "ClientId = " + proxy.getClientId(TEST_PLATFORM));
             }
         });
 
-        toUserCenterBtn.setOnClickListener(new View.OnClickListener() {
+        alarmCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlarmBusiness business = new AlarmBusiness();
+
+                ArrayList<AlarmBusinessInfo> alarmBusinessInfos = new ArrayList<>();
+                AlarmBusinessInfo alarmBusinessInfo = getNewAlarmBusinessInfo();
+                alarmBusinessInfos.add(alarmBusinessInfo);
+
+                business.alarmBusinessInfos = alarmBusinessInfos;
+                business.alarmOper = EAlarmOper.CREATE;
+
+                proxy.requestAlarmManagement(TEST_PLATFORM, business);
+            }
+        });
+
+        alarmDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlarmBusiness business = new AlarmBusiness();
+
+                ArrayList<AlarmBusinessInfo> alarmBusinessInfos = new ArrayList<>();
+                AlarmBusinessInfo alarmBusinessInfo = new AlarmBusinessInfo();
+                alarmBusinessInfo.deviceInfo = getAlarmBusinessDeviceInfo();
+                alarmBusinessInfo.alarmId = addedAlarmId;
+                alarmBusinessInfos.add(alarmBusinessInfo);
+
+                business.alarmBusinessInfos = alarmBusinessInfos;
+                business.alarmOper = EAlarmOper.DELETE;
+
+                proxy.requestAlarmManagement(TEST_PLATFORM, business);
+            }
+        });
+
+        alarmUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlarmBusiness business = new AlarmBusiness();
+
+                ArrayList<AlarmBusinessInfo> alarmBusinessInfos = new ArrayList<>();
+                AlarmBusinessInfo alarmBusinessInfo = new AlarmBusinessInfo();
+                alarmBusinessInfo.deviceInfo = getAlarmBusinessDeviceInfo();
+                alarmBusinessInfo.alarmId = addedAlarmId;
+                alarmBusinessInfo.alarmTime = System.currentTimeMillis() + TIME_MILLIS_DELTA * 2;
+                alarmBusinessInfo.note = "New Alarm note";
+                alarmBusinessInfo.repeatType = EAlarmRepeatType.DAY;
+                alarmBusinessInfos.add(alarmBusinessInfo);
+
+                business.alarmBusinessInfos = alarmBusinessInfos;
+                business.alarmOper = EAlarmOper.UPDATE;
+
+                proxy.requestAlarmManagement(TEST_PLATFORM, business);
+            }
+        });
+
+        alarmQuery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlarmBusiness business = new AlarmBusiness();
+
+                ArrayList<AlarmBusinessInfo> alarmBusinessInfos = new ArrayList<>();
+                AlarmBusinessInfo alarmBusinessInfo = new AlarmBusinessInfo();
+                alarmBusinessInfo.deviceInfo = getAlarmBusinessDeviceInfo();
+                alarmBusinessInfos.add(alarmBusinessInfo);
+
+                business.alarmBusinessInfos = alarmBusinessInfos;
+                business.alarmOper = EAlarmOper.QUERY;
+
+                proxy.requestAlarmManagement(TEST_PLATFORM, business);
+            }
+        });
+
+        reportEndStateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deviceManager = new DeviceManager();
@@ -204,7 +315,8 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
                 deviceManager.dsn = TEST_DSN;
                 deviceManager.deviceOEM = TEST_DEVOEM;
                 deviceManager.deviceType = TEST_DEVTYPE;
-                proxy.toUserCenter(EUserAttrType.HOMEPAGE, deviceManager);
+                deviceManager.guid = "";
+                proxy.reportEndState(TEST_PLATFORM, deviceManager);
             }
         });
 
@@ -218,7 +330,7 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
                 deviceManager.deviceType = TEST_DEVTYPE;
                 proxy.toUserCenter(EUserAttrType.HOMEPAGE, deviceManager, new UserCenterStateListener() {
                     @Override
-                    public void onSuccess(ELoginPlatform platform, int type) {
+                    public void onSuccess(ELoginPlatform platform, int type, CommOpInfo commOpInfo) {
                         switch (type) {
                             case UserCenterStateListener.LOGIN_TYPE:
                                 break;
@@ -228,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
                     }
 
                     @Override
-                    public void onError(int type) {
+                    public void onError(int type, CommOpInfo commOpInfo) {
                         switch (type) {
                             case UserCenterStateListener.LOGIN_TYPE:
                                 break;
@@ -236,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
                     }
 
                     @Override
-                    public void onCancel(int type) {
+                    public void onCancel(int type, CommOpInfo commOpInfo) {
 
                     }
                 });
@@ -371,21 +483,47 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
         toSmartLinkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, SmartLinkActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("loginplatform", TEST_PLATFORM.ordinal());
+                intent.putExtra("bundle", bundle);
+                startActivity(intent);
             }
         });
 
         toSoftAPButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, SoftAPActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("loginplatform", TEST_PLATFORM.ordinal());
+                intent.putExtra("bundle", bundle);
+                startActivity(intent);
             }
         });
 
         toQRLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LoginProxy loginProxy = LoginProxy.getWebInstance(null, null, MainActivity.this);
+                loginProxy.requestQRLogin(MainActivity.this, new QRStateListener() {
+                    @Override
+                    public void onSuccess(ELoginPlatform platform, int type, CommOpInfo commOpInfo) {
+                        if (QRStateListener.LOGIN_TYPE == type) {
+                            Toast.makeText(MainActivity.this, "QRLogin valid token", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
+                    @Override
+                    public void onError(int type, CommOpInfo commOpInfo) {
+                        Toast.makeText(MainActivity.this, "QRLogin invalid token", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancel(int type, CommOpInfo commOpInfo) {
+
+                    }
+                });
             }
         });
     }
@@ -415,7 +553,7 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
     }
 
     @Override
-    public void onSuccess(int type) {
+    public void onSuccess(int type, CommOpInfo commOpInfo) {
         switch (type)
         {
             case AuthorizeListener.AUTH_TYPE:
@@ -425,9 +563,15 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
                 break;
             case AuthorizeListener.WX_TVSIDRECV_TYPE:
                 wxLoginBtn.setEnabled(false);
+                if (isSimpleInterface) {
+                    proxy.tvsSetUser(ELoginPlatform.WX, TEST_WX_USER_RET);
+                }
                 break;
             case AuthorizeListener.QQOPEN_TVSIDRECV_TYPE:
                 qqOpenLoginBtn.setEnabled(false);
+                if (isSimpleInterface) {
+                    proxy.tvsSetUser(ELoginPlatform.QQOpen, TEST_QQOPEN_USER_RET);
+                }
                 break;
             case AuthorizeListener.QQ_TVSIDRECV_TYPE:
                 qqLoginBtn.setEnabled(false);
@@ -464,9 +608,6 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
             case BindingListener.SET_PUSH_MAP_INFOEX_TYPE:
                 devicebindTextView.setText("Bind Success Ex");
                 break;
-            case BindingListener.SET_PUSH_MAP_INFO_TYPE:
-                devicebindTextView.setText("Bind Success");
-                break;
             case BindingListener.DEL_PUSH_MAP_INFO_TYPE:
                 deviceunbindTextView.setText("Unbind Success");
                 break;
@@ -484,11 +625,33 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
                                 + ",amt=" + DeviceCPMemberManager.getInstance().deviceAmt
                                     +",amtU=" + DeviceCPMemberManager.getInstance().deviceAmtUnit);
                 break;
+            case AuthorizeListener.REPORTENDSTATE_TYPE:
+                reportRelationTextView.setText("Succ");
+                break;
+            case AuthorizeListener.MANAGEACCT_TYPE:
+                break;
+            case AuthorizeListener.ALARMMANAGEMENT_TYPE:
+                AlarmBusiness alarmBusiness = ProductManager.getInstance().alarmBusiness;
+                ArrayList<AlarmBusinessInfo> effectBusinessInfos = alarmBusiness.alarmBusinessInfos;
+                EAlarmOper alarmOper = alarmBusiness.alarmOper;
+                Toast.makeText(MainActivity.this, alarmOper + " Alarms Size = " + effectBusinessInfos.size(), Toast.LENGTH_SHORT).show();
+                if (effectBusinessInfos != null && effectBusinessInfos.size() > 0) {
+                    AlarmBusinessInfo alarmBusinessInfo = effectBusinessInfos.get(0);
+                    Log.v(LOG_TAG, alarmOper + " --- " + alarmBusinessInfo.toString());
+                    if (EAlarmOper.CREATE == alarmOper) {
+                        addedAlarmId = alarmBusinessInfo.alarmId;
+                    }
+                }
+                Log.v(LOG_TAG, "retCode = " + commOpInfo.retCode);
+                if (commOpInfo.retCode == EAlarmOpResultType.NO_ALARM_DATA.getOpResult()) {
+                    Log.v(LOG_TAG, "No Alarm Data");
+                }
+                break;
         }
     }
 
     @Override
-    public void onError(int type) {
+    public void onError(int type, CommOpInfo commOpInfo) {
         switch (type)
         {
             case AuthorizeListener.AUTH_TYPE:
@@ -533,9 +696,6 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
             case BindingListener.SET_PUSH_MAP_INFOEX_TYPE:
                 devicebindTextView.setText("Bind Error Ex");
                 break;
-            case BindingListener.SET_PUSH_MAP_INFO_TYPE:
-                devicebindTextView.setText("Bind Error");
-                break;
             case BindingListener.DEL_PUSH_MAP_INFO_TYPE:
                 deviceunbindTextView.setText("Unbind Error");
                 break;
@@ -550,6 +710,14 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
                 break;
             case BindingListener.BIND_GET_DEVICE_STATUS_TYPE:
                 getDeviceStatusTextView.setText("Get Device Status Error");
+                break;
+            case AuthorizeListener.REPORTENDSTATE_TYPE:
+                reportRelationTextView.setText("Error");
+                break;
+            case AuthorizeListener.MANAGEACCT_TYPE:
+                break;
+            case AuthorizeListener.ALARMMANAGEMENT_TYPE:
+                Toast.makeText(MainActivity.this, "alarmManagement onError", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -569,8 +737,10 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
 
         wxLoginBtn = (Button)findViewById(R.id.wxlogin);
         wxLogoutBtn = (Button)findViewById(R.id.wxlogout);
-        toUserCenterBtn = (Button) findViewById(R.id.tousercenterbtn);
+        reportEndStateBtn = (Button) findViewById(R.id.reportendstatebtn);
         toUserCenterWithCallbackBtn = (Button) findViewById(R.id.tousercenterwithcbbtn);
+
+        reportRelationTextView = (TextView) findViewById(R.id.reportrelationtextview);
 
         qqOpenLoginBtn = (Button)findViewById(R.id.qqopenlogin);
         qqOpenLogoutBtn = (Button)findViewById(R.id.qqopenlogout);
@@ -579,6 +749,11 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
         qqLogoutBtn = (Button)findViewById(R.id.qqlogout);
 
         toGetClientIdBtn = (Button) findViewById(R.id.getclientidbtn);
+
+        alarmCreate = (Button) findViewById(R.id.alarmcreate);
+        alarmDel = (Button) findViewById(R.id.alarmdel);
+        alarmUpdate = (Button) findViewById(R.id.alarmupdate);
+        alarmQuery = (Button) findViewById(R.id.alarmquery);
 
         getCaptchaEditText = (EditText) findViewById(R.id.getcaptchaedittext);
         getCaptchaButton = (Button) findViewById(R.id.getcaptchabutton);
@@ -636,6 +811,7 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
         qqOpenInfoManager = (QQOpenInfoManager) proxy.getInfoManager(ELoginPlatform.QQOpen);
         qqInfoManager = (QQInfoManager) innerProxy.getInfoManager(ELoginPlatform.QQ);
 
+        proxy.initNetEnv();
         proxy.setOwnActivity(this);
 
 
@@ -645,18 +821,30 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
         innerProxy.setOwnActivity(this);
         innerProxy.setAuthorizeListener(this);
         innerProxy.setBindingListener(this);
+
+        isSimpleInterface = false;
     }
 
     private void requestProxyOp() {
         if (proxy.isTokenExist(ELoginPlatform.WX, this)) {
-            proxy.requestTokenVerify(ELoginPlatform.WX, "productId", "dsn");
+            if (isSimpleInterface) {
+                proxy.tvsAuth(ELoginPlatform.WX, TEST_WX_REFRESH_RET);
+            }
+            else {
+                proxy.requestTokenVerify(ELoginPlatform.WX, "productId", "dsn");
+            }
         }
         else {
             wxLoginBtn.setEnabled(true);
         }
 
         if (proxy.isTokenExist(ELoginPlatform.QQOpen, this)) {
-            proxy.requestTokenVerify(ELoginPlatform.QQOpen, "productId", "dsn");
+            if (isSimpleInterface) {
+                proxy.tvsQQOpenVerify(qqOpenInfoManager.appId, qqOpenInfoManager.openID, qqOpenInfoManager.accessToken);
+            }
+            else {
+                proxy.requestTokenVerify(ELoginPlatform.QQOpen, "productId", "dsn");
+            }
         }
         else {
             qqOpenLoginBtn.setEnabled(true);
@@ -690,5 +878,21 @@ public class MainActivity extends AppCompatActivity implements AuthorizeListener
             qqTokenLayout.setVisibility(View.VISIBLE);
             qqATTextView.setText("AccessToken: " + qqInfoManager.accessToken);
         }
+    }
+
+    private AlarmBusinessDeviceInfo getAlarmBusinessDeviceInfo() {
+        AlarmBusinessDeviceInfo alarmBusinessDeviceInfo = new AlarmBusinessDeviceInfo();
+        alarmBusinessDeviceInfo.productId = TEST_PRODUCTID;
+        alarmBusinessDeviceInfo.guid = TEST_GUID;
+        return alarmBusinessDeviceInfo;
+    }
+
+    private AlarmBusinessInfo getNewAlarmBusinessInfo() {
+        AlarmBusinessInfo alarmBusinessInfo = new AlarmBusinessInfo();
+        alarmBusinessInfo.deviceInfo = getAlarmBusinessDeviceInfo();
+        alarmBusinessInfo.alarmTime = System.currentTimeMillis() + TIME_MILLIS_DELTA;
+        alarmBusinessInfo.note = "Alarm note";
+        alarmBusinessInfo.repeatType = EAlarmRepeatType.ONCE;
+        return alarmBusinessInfo;
     }
 }
